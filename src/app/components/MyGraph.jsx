@@ -4,24 +4,37 @@ import Graph from "graphology";
 import { SigmaContainer, useLoadGraph } from "@react-sigma/core";
 import "@react-sigma/core/lib/react-sigma.min.css";
 
-const LoadGraph = () => {
+const LoadGraph = ({relationships, connections}) => {
   const loadGraph = useLoadGraph();
 
   useEffect(() => {
     const graph = new Graph();
-    graph.addNode("first", { x: 0, y: 0, size: 15, label: "My first node", color: "#FA4F40" });
+
+    relationships.map((person) => graph.addNode(person.id, { 
+    x: person.x,
+    y: person.y,
+    size: person.size, 
+    label: person.name, 
+    color: "#FA4F40" }));
+
+    connections.map((connection) =>  graph.addEdgeWithKey(connection.id, connection.you, connection.them) )  
+   
     loadGraph(graph);
+  
   }, [loadGraph]);
 
   return null;
 };
 
-const DisplayGraph = () => {
+const MyGraph = ({data, rel}) => {
+
   return (
-    <SigmaContainer style={{ height: "500px", width: "500px" }}>
-      <LoadGraph />
+    <>
+    <SigmaContainer style={{ height: "800px", width: "800px" }}>
+      <LoadGraph relationships={data} connections={rel}/>
     </SigmaContainer>
+    </>
   );
 };
 
-export default  DisplayGraph
+export default  MyGraph
