@@ -4,8 +4,9 @@ import "@react-sigma/core/lib/react-sigma.min.css";
 import Graph from "graphology";
 import { useLoadGraph } from "@react-sigma/core";
 
+
 const MyGraph = ({data, rel}) => {
-  
+
   const LoadGraph = ({relationships, connections})=>  {
     const loadGraph = useLoadGraph();
     const graph = new Graph();

@@ -4,7 +4,7 @@ import Link from 'next/link'
 const Navbar = () => {
   return (
     <>
-    <div className='columns-2'>
+    <div className='flex justify-between'>
         <div>
             <Link href='/'>
                 <h1>The gay logo</h1>
