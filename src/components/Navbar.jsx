@@ -1,5 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
+import logo from '../../public/chartlogo.png'
 
 const Navbar = () => {
   return (
@@ -7,7 +9,7 @@ const Navbar = () => {
     <div className='flex justify-between'>
         <div>
             <Link href='/'>
-                <h1>The gay logo</h1>
+                <Image width={75} height={75} src={logo} alt='the weird logo'></Image>
             </Link>
         </div>
         <div className='columns-2'>
