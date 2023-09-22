@@ -1,55 +1,27 @@
 import React from 'react'
-import Navbar from '../components/Navbar'
-import MyGraph from '../components/MyGraph'
+import Navbar from '../../components/Navbar'
+import MyGraph from '../../components/MyGraph'
+import prisma from "../../lib/prisma"
 
-const page = () => {
-    const nodeInfo = [{
-        name: "Sydney",
-        x: 0,
-        y: 0,
-        id: "A",
-        size: 15,
-        color: "#FA4F40"
-    },
-    {
-        name: "Holly",
-        x: 1,
-        y: 1,
-        id: "B",
-        size: 15,
-        color: "#FA4F40"
-    },
-    {
-        name: "Eddy",
-        x: 1,
-        y: 2,
-        id: "C",
-        size: 15,
-        color: "#FA4F40"
-    }
-    ]
+export default async function page() {
 
-    const relInfo = [{
-        id: "001",
-        you: "A",
-        them: "B"
-    },
-    {
-        id: "002",
-        you: "A",
-        them: "C"
+    async function getUsers() {
+        return await prisma.person.findMany()
     }
-    ]
+    const users = await getUsers()
+
+    async function getConnection() {
+        return await prisma.connection.findMany()
+    }
+    const connections = await getConnection()
 
     return (
         <>
             <Navbar></Navbar>
             <div className='flex flex-col items-center'>
-                <MyGraph data={nodeInfo} rel={relInfo}></MyGraph>
+                <MyGraph data={users} rel={connections}></MyGraph>
             </div>
         </>
 
     )
 }
-
-export default page

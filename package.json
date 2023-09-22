@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^5.3.1",
     "@react-sigma/core": "^3.4.2",
     "@react-sigma/layout-circular": "^3.4.2",
     "@react-sigma/layout-core": "^3.4.2",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@faker-js/faker": "^8.1.0",
     "@types/node": "20.6.2",
-    "@types/react": "18.2.22"
+    "@types/react": "18.2.22",
+    "prisma": "^5.3.1"
   }
 }
