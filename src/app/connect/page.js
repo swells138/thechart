@@ -1,6 +1,4 @@
 import React from 'react'
-import Navbar from '../../components/Navbar'
-import MyGraph from '../../components/MyGraph'
 import prisma from "../../lib/prisma"
 import Drawer from "../../components/Drawer"
 
@@ -43,9 +41,8 @@ export default async function page() {
     return (
         <>
             <div>
-                <Drawer data={users} rel={connections}></Drawer>
+                <Drawer connect={createConnection} create={create} data={users} rel={connections}></Drawer>
             </div>
         </>
-
     )
 }

@@ -28,10 +28,14 @@ const darkTheme = createTheme({
     },
 });
 
-export default function PermanentDrawerLeft({ data, rel }) {
+export default function PermanentDrawerLeft({ data, rel, create, connect }) {
 
-    function create() {
-        console.log(added)
+    function handleCreate(event) {
+        create(event)
+    }
+
+    function handleConnect(event) {
+        connect(event)
     }
 
     return (
@@ -75,25 +79,33 @@ export default function PermanentDrawerLeft({ data, rel }) {
                                 <Typography>Add a Node</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <form id='form' action={create}>
+                                <form id='form' action={handleCreate}>
                                     <div className='flex flex-col mx-8'>
                                         <input className='border rounded text-black' id="name" name='name' placeholder='First Name'></input>
                                         <button className='rounded bg-rose-400 p-1 mt-3' type='submit'>Add Node</button>
                                     </div>
                                 </form>
-
                             </AccordionDetails>
                         </Accordion>
-                        {/* {['Add Node', 'Add Connection'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))} */}
+                        <Accordion>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <Typography>Add a Connection</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <form id='form' action={handleConnect}>
+                                    <div className='flex flex-col mx-8'>
+                                        <label htmlFor="name" className="mb-2">Connect a Node</label>
+                                        <input className='border rounded text-black' id="personOne" name='personOne' placeholder='Person One'></input>
+                                        <input className='border rounded text-black mt-2' id="personTwo" name='personTwo' placeholder='Person Two'></input>
+                                        <button className='rounded bg-rose-400 p-2 mt-3' type='submit'>Add Connection</button>
+                                    </div>
+                                </form>
+                            </AccordionDetails>
+                        </Accordion>
                     </List>
                     <Divider />
                     <List>
