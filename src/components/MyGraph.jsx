@@ -2,14 +2,31 @@
 import { SigmaContainer } from "@react-sigma/core";
 import "@react-sigma/core/lib/react-sigma.min.css";
 import Graph from "graphology";
-import { useLoadGraph, SearchControl, ControlsContainer } from "@react-sigma/core";
-
+import { useLoadGraph, SearchControl, ControlsContainer, useRegisterEvents } from "@react-sigma/core";
+import { useEffect, useState  } from "react";
 
 const MyGraph = ({ data, rel }) => {
+const [node, setNode] = useState(1)
+console.log(node)
 
-  const LoadGraph = ({ relationships, connections }) => {
+const onNodeClick = (node) => {
+  setNode(node)
+  };
+
+  const LoadGraph = ({ relationships, connections, onNodeClick  }) => {
+   
     const loadGraph = useLoadGraph();
     const graph = new Graph();
+    const registerEvents = useRegisterEvents();
+
+  
+    useEffect(()=>{
+      registerEvents({
+        clickNode: (event) => {
+          onNodeClick(event.node)
+        } 
+      })
+    },[registerEvents])
 
     relationships.map((person) => graph.addNode(person.id, {
       x: Math.random(),
@@ -34,7 +51,7 @@ const MyGraph = ({ data, rel }) => {
           <ControlsContainer position={"top-right"}>
             <SearchControl style={{ width: "200px" }} />
           </ControlsContainer>
-          <LoadGraph relationships={data} connections={rel}></LoadGraph>
+          <LoadGraph relationships={data} connections={rel} onNodeClick={onNodeClick} ></LoadGraph>
         </SigmaContainer>
       </div>
     </>

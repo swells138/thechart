@@ -52,7 +52,10 @@ export default function PermanentDrawerLeft({ data, rel, create, connect }) {
                                 Your Chart
                             </Typography>
                         </Toolbar>
-                        <MyGraph data={data} rel={rel}></MyGraph>
+                        <MyGraph 
+                        data={data} 
+                        rel={rel} 
+                        ></MyGraph>
                     </div>
                 </AppBar>
                 <Drawer

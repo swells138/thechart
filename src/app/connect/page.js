@@ -1,47 +1,58 @@
 import React from 'react'
-import prisma from "../../lib/prisma"
+import { getUsers, getConnection, create, createConnection } from "../../lib/prisma"
 import Drawer from "../../components/Drawer"
 
 export default async function page() {
 
-    async function getUsers() {
-        return await prisma.person.findMany()
-    }
-    const users = await getUsers()
-
-    async function getConnection() {
-        return await prisma.connection.findMany()
-    }
-    const connections = await getConnection()
-
-    async function create(event) {
-        "use server"
-        var inputValue = event.get("name");
-
-        await prisma.person.create({
-            data: {
-                name: inputValue
-            }
-        })
-    }
-
-    async function createConnection(event) {
+    async function createNodeRelationship(userData) {
         'use server'
-        var inputValueOne = event.get("personOne");
-        var inputValueTwo = event.get("personTwo");
-
-        await prisma.connection.create({
-            data: {
-                personOne: inputValueOne,
-                personTwo: inputValueTwo
-            }
-        })
+        try {
+            createConnection(userData);
+        } catch (error) {
+            console.error('Error creating user:', error);
+        }
     }
+
+    async function createNode(userData) {
+        'use server'
+        try {
+            create(userData);
+        } catch (error) {
+            console.error('Error creating user:', error);
+        }
+    }
+
+    async function getNodeConnections() {
+        'use server'
+        try {
+            return getConnection()
+        } catch (error) {
+            console.error("error poop")
+        }
+    }
+    const connectionsList = await getNodeConnections()
+
+    async function getGraphNodes() {
+        'use server'
+        try {
+            return getUsers()
+        } catch (error) {
+            console.error("error poop")
+        }
+    }
+    const users = await getGraphNodes()
+
+
 
     return (
         <>
             <div>
-                <Drawer connect={createConnection} create={create} data={users} rel={connections}></Drawer>
+                <Drawer
+                    connect={createNodeRelationship}
+                    create={createNode}
+                    data={users}
+                    rel={connectionsList}
+                ></Drawer>
             </div>
         </>
     )
