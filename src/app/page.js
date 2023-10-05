@@ -8,7 +8,7 @@ export default function Home() {
     < >
       <Navbar></Navbar>
       <div className="flex flex-wrap ">
-        <div className="flex items-center w-full lg:w-1/2">
+        <div className="flex items-center w-full  md:w-1/2 lg:w-1/2">
           <div className="max-w-2xl mb-8">
             <h1 className="text-7xl font-bold leading-snug tracking-tight text-gray-700 lg:text-7xl lg:leading-tight xl:text-8xl xl:leading-tight dark:text-white">
               The Chart
@@ -44,7 +44,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center w-full lg:w-1/2">
+        <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
           <div className="">
             <Image
               src={chart}
