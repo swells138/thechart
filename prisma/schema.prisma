@@ -11,13 +11,28 @@ datasource db {
   relationMode = "prisma"
 }
 
+// model Person {
+//   id   Int    @id @default(autoincrement())
+//   name String
+// }
+
+// model Connection {
+//   id        Int    @id @default(autoincrement())
+//   personOne String
+//   personTwo String
+// }
+
 model Person {
-  id   Int    @id @default(autoincrement())
-  name String
+  id                     Int          @id @default(autoincrement())
+  name                   String
+  connectionsAsPersonOne Connection[] @relation("PersonOneConnections")
+  connectionsAsPersonTwo Connection[] @relation("PersonTwoConnections")
 }
 
 model Connection {
-  id        Int    @id @default(autoincrement())
-  personOne String
-  personTwo String
+  id               Int    @id @default(autoincrement())
+  personOne        Int
+  personTwo        Int
+  personOneDetails Person @relation("PersonOneConnections", fields: [personOne], references: [id])
+  personTwoDetails Person @relation("PersonTwoConnections", fields: [personTwo], references: [id])
 }

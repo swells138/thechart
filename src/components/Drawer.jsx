@@ -1,5 +1,5 @@
 "use client"
-import * as React from 'react';
+import React, {useState} from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
@@ -28,7 +28,9 @@ const darkTheme = createTheme({
     },
 });
 
-export default function PermanentDrawerLeft({ data, rel, create, connect }) {
+export default function PermanentDrawerLeft({ data, rel, create, connect,namedConnect }) {
+    const [node, showNode] = useState(false)
+    const [connectButton, showConnect] = useState(false)
 
     function handleCreate(event) {
         create(event)
@@ -37,6 +39,20 @@ export default function PermanentDrawerLeft({ data, rel, create, connect }) {
     function handleConnect(event) {
         connect(event)
     }
+
+    function onNodeClicked() {
+        showNode((prev) => !prev);
+        if (connect) {
+          showConnect(false);
+        }
+      }
+    
+      function onConnectClicked() {
+        showConnect((prev) => !prev);
+        if (node) {
+          showNode(false);
+        }
+      }
 
     return (
         <ThemeProvider theme={darkTheme}>
@@ -52,11 +68,56 @@ export default function PermanentDrawerLeft({ data, rel, create, connect }) {
                                 Your Chart
                             </Typography>
                         </Toolbar>
-                        <MyGraph 
-                        data={data} 
-                        rel={rel} 
-                        ></MyGraph>
                     </div>
+                        <div className='flex justify-around columns-2 bg-stone-950'>
+                            <div>
+                                <MyGraph 
+                                data={data} 
+                                rel={rel} 
+                                ></MyGraph>
+                            </div>
+                            {node && !connectButton && (
+                                <div>
+                                    <h1 className='text-2xl font-bold'>Your Nodes</h1>
+                                    <Divider />
+                                    <ul>
+                                        {data.map(item => (
+                                            <li className='p-1' key={item.id}>{item.name}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
+                            {connectButton && !node && (
+                                <div>
+                                    <h1 className='text-2xl font-bold'>Your Connections</h1>
+                                    <Divider />
+                                    <ul>
+                                        {namedConnect.map(item => (
+                                            <li className='p-1' key={item.id}>{item.personOne} + {item.personTwo}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                                {/* {node && (
+                            <div>
+                              <h1 className='text-2xl font-bold'>Your Nodes</h1>
+                              <Divider />
+                              <div>
+                                    <ul>
+                                        {data.map(item => (
+                                        <li className='p-1' key={item.id}>{item.name}</li>
+                                        ))}
+                                    </ul>
+                                    <ul>
+                                        {namedConnect.map(item => (
+                                        <li className='p-1' key={item.id}>{item.personOne} + {item.personTwo}</li>
+                                        ))}
+                                    </ul>
+                              </div>
+                            </div>
+                            )} */}
+                        </div>
                 </AppBar>
                 <Drawer
                     sx={{
@@ -69,7 +130,7 @@ export default function PermanentDrawerLeft({ data, rel, create, connect }) {
                     }}
                     variant="permanent"
                     anchor="left"
-                >
+                    >
                     <Toolbar />
                     <Divider />
                     <List>
@@ -78,7 +139,7 @@ export default function PermanentDrawerLeft({ data, rel, create, connect }) {
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
-                            >
+                                >
                                 <Typography>Add a Node</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
@@ -95,7 +156,7 @@ export default function PermanentDrawerLeft({ data, rel, create, connect }) {
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
-                            >
+                                >
                                 <Typography>Add a Connection</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
@@ -112,16 +173,22 @@ export default function PermanentDrawerLeft({ data, rel, create, connect }) {
                     </List>
                     <Divider />
                     <List>
-                        {['Nodes', 'Connections'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
+                            <ListItem disablePadding>
+                                <ListItemButton onClick={onNodeClicked}>
                                     <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                         <InboxIcon /> 
                                     </ListItemIcon>
-                                    <ListItemText primary={text} />
+                                    <ListItemText primary={"Nodes"}/>
                                 </ListItemButton>
                             </ListItem>
-                        ))}
+                            <ListItem disablePadding>
+                                <ListItemButton onClick={onConnectClicked}>
+                                    <ListItemIcon>
+                                          <MailIcon />
+                                    </ListItemIcon>
+                                    <ListItemText  primary={"Connections"} />
+                                </ListItemButton>
+                            </ListItem>
                     </List>
                 </Drawer>
             </Box>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { getUsers, getConnection, create, createConnection } from "../../lib/prisma"
+import { getUsers, getConnection, create, createConnection, getConnectionNames } from "../../lib/prisma"
 import Drawer from "../../components/Drawer"
 
 export default async function page() {
@@ -42,7 +42,15 @@ export default async function page() {
     }
     const users = await getGraphNodes()
 
-
+    async function getConnectionNamesData() {
+        'use server'
+        try {
+            return getConnectionNames()
+        } catch (error) {
+            console.error("error poop")
+        }
+    }
+    const connectionsListNames = await getConnectionNamesData()
 
     return (
         <>
@@ -52,6 +60,7 @@ export default async function page() {
                     create={createNode}
                     data={users}
                     rel={connectionsList}
+                    namedConnect={connectionsListNames}
                 ></Drawer>
             </div>
         </>
