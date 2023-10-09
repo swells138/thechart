@@ -6,7 +6,6 @@ async function getUsers() {
     return await prisma.person.findMany()
 }
 
-
 async function getConnection() {
     try {
         const connections = await prisma.connection.findMany();

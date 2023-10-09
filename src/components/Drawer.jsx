@@ -61,7 +61,7 @@ export default function PermanentDrawerLeft({ data, rel, create, connect,namedCo
                 <AppBar
                     position="fixed"
                     sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-                >
+                    >
                     <div className='bg-stone-950'>
                         <Toolbar>
                             <Typography variant="h6" noWrap component="div">
@@ -76,47 +76,30 @@ export default function PermanentDrawerLeft({ data, rel, create, connect,namedCo
                                 rel={rel} 
                                 ></MyGraph>
                             </div>
-                            {node && !connectButton && (
-                                <div>
-                                    <h1 className='text-2xl font-bold'>Your Nodes</h1>
-                                    <Divider />
-                                    <ul>
-                                        {data.map(item => (
-                                            <li className='p-1' key={item.id}>{item.name}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-
-                            {connectButton && !node && (
-                                <div>
-                                    <h1 className='text-2xl font-bold'>Your Connections</h1>
-                                    <Divider />
-                                    <ul>
-                                        {namedConnect.map(item => (
-                                            <li className='p-1' key={item.id}>{item.personOne} + {item.personTwo}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-                                {/* {node && (
                             <div>
-                              <h1 className='text-2xl font-bold'>Your Nodes</h1>
-                              <Divider />
-                              <div>
-                                    <ul>
-                                        {data.map(item => (
-                                        <li className='p-1' key={item.id}>{item.name}</li>
-                                        ))}
-                                    </ul>
-                                    <ul>
-                                        {namedConnect.map(item => (
-                                        <li className='p-1' key={item.id}>{item.personOne} + {item.personTwo}</li>
-                                        ))}
-                                    </ul>
-                              </div>
+                                {node && !connectButton && (
+                                    <div>
+                                        <h1 className='text-2xl font-bold'>Your Nodes</h1>
+                                        <Divider />
+                                        <ul>
+                                            {data.map(item => (
+                                                <li className='p-1' key={item.id}>{item.name}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                                {connectButton && !node && (
+                                    <div>
+                                        <h1 className='text-2xl font-bold'>Your Connections</h1>
+                                        <Divider />
+                                        <ul>
+                                            {namedConnect.map(item => (
+                                                <li className='p-1' key={item.id}>{item.personOne} + {item.personTwo}</li>
+                                                ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
-                            )} */}
                         </div>
                 </AppBar>
                 <Drawer
