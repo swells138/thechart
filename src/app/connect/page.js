@@ -1,5 +1,5 @@
 import React from 'react'
-import { getUsers, getConnection, create, createConnection, getConnectionNames, getOneNode } from "../../lib/prisma"
+import { create, createConnection, getConnectionNames } from "../../lib/prisma"
 import Drawer from "../../components/Drawer"
 
 export default async function page() {

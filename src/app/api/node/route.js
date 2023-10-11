@@ -7,8 +7,8 @@ async function GET(request, _) {
     try {
         const users = await prisma.person.findMany();
         const userArray = users.map(user => {
-            const { id, name } = user;
-            return { id, name };
+            const { id, firstName, color, age } = user;
+            return { id, firstName, color, age };
         });
 
         return NextResponse.json(userArray);

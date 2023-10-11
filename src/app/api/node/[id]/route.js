@@ -14,10 +14,14 @@ async function GET(request, { params }) {
         });
 
         if (user) {
-            const { id, name } = user;
+            const { id, firstName, city, state, color, age } = user;
             const json = {
                 id,
-                name
+                firstName,
+                city,
+                state,
+                color,
+                age
             };
             return NextResponse.json(json);
         } else {

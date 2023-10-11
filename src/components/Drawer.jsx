@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
@@ -29,9 +29,33 @@ const darkTheme = createTheme({
     },
 });
 
-export default function PermanentDrawerLeft({  create, connect, namedConnect }) {
-    const [node, showNode] = useState(false)
-    const [connectButton, showConnect] = useState(false)
+export default function PermanentDrawerLeft({ create, connect, namedConnect }) {
+    const [state, setState] = useState({
+        node: false,
+        connectButton: false,
+        person: false
+    });
+    const [nodeList, setNodeList] = useState({nodeListArray:[], singleNode:{}})
+
+        useEffect(()=>{
+            fetch(`http://localhost:3000/api/node`).then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+                })
+                .then(data => {
+                console.log(data,'fetching nodes')
+                    setNodeList((prev)=>{
+                        let nd = {...prev}
+                        nd.nodeListArray = data
+                        return nd
+                    })
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        },[])
 
     function handleCreate(event) {
         create(event)
@@ -42,20 +66,27 @@ export default function PermanentDrawerLeft({  create, connect, namedConnect }) 
     }
 
     function onNodeClicked() {
-        showNode((prev) => !prev);
-        if (connect) {
-          showConnect(false);
-        }
+        setState(prevState => ({
+            ...prevState,
+            node: !prevState.node,
+            connectButton: false
+        }));
     }
-    
+
     function onConnectClicked() {
-        showConnect((prev) => !prev);
-        if (node) {
-          showNode(false);
-        }
+        setState(prevState => ({
+            ...prevState,
+            connectButton: !prevState.connectButton,
+            node: false
+        }));
     }
     
     function handleNodeSend(event) {
+        setState((prev)=>{
+            let nd = {...prev}
+            nd.person = true
+            return nd
+        })
         fetch(`http://localhost:3000/api/node/${event}`).then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -63,11 +94,13 @@ export default function PermanentDrawerLeft({  create, connect, namedConnect }) 
             return response.json();
         })
         .then(data => {
-            // Handle the JSON response data here
-            console.log(data);
+            setNodeList((prev)=>{
+                let nd = {...prev}
+                nd.singleNode = data
+                return nd
+            })
         })
         .catch(error => {
-            // Handle errors here
             console.error('Error:', error);
         });
     }
@@ -94,18 +127,19 @@ export default function PermanentDrawerLeft({  create, connect, namedConnect }) 
                                 ></MyGraph>
                             </div>
                             <div>
-                                {node && !connectButton && (
+                                {state.node && !state.connectButton && (
                                     <div>
                                         <h1 className='text-2xl font-bold'>Your Nodes</h1>
                                         <Divider />
                                         <ul>
-                                            {data.map(item => (
-                                                <li className='p-1' key={item.id}>{item.name}</li>
+                                            {nodeList.nodeListArray.map(item => (
+                                                <li className='p-1' key={item.id}>{item.firstName}</li>
                                             ))}
+                                            <Divider />
                                         </ul>
                                     </div>
                                 )}
-                                {connectButton && !node && (
+                                {state.connectButton && !state.node && (
                                     <div>
                                         <h1 className='text-2xl font-bold'>Your Connections</h1>
                                         <Divider />
@@ -114,6 +148,7 @@ export default function PermanentDrawerLeft({  create, connect, namedConnect }) 
                                                 <li className='p-1' key={item.id}>{item.personOne} + {item.personTwo}</li>
                                                 ))}
                                         </ul>
+                                        <Divider />
                                     </div>
                                 )}
                             </div>
@@ -145,7 +180,13 @@ export default function PermanentDrawerLeft({  create, connect, namedConnect }) 
                             <AccordionDetails>
                                 <form id='form' action={handleCreate}>
                                     <div className='flex flex-col mx-8'>
-                                        <input className='border rounded text-black' id="name" name='name' placeholder='First Name'></input>
+                                        <input className='border rounded text-black my-1' id="name" name='name' placeholder='First Name'></input>
+                                        <input className='border rounded text-black my-1' id="last" name='last' placeholder='Last Name'></input>
+                                        <input className='border rounded text-black my-1' id="email" name='email' placeholder='Email'></input>
+                                        <input className='border rounded text-black my-1' id="color" name='color' placeholder='Color'></input>
+                                        <input className='border rounded text-black my-1' id="age" name='age' placeholder='Age'></input>
+                                        <input className='border rounded text-black my-1' id="city" name='city' placeholder='City'></input>
+                                        <input className='border rounded text-black my-1' id="state" name='state' placeholder='State'></input>
                                         <button className='rounded bg-rose-400 p-1 mt-3' type='submit'>Add Node</button>
                                     </div>
                                 </form>
@@ -190,6 +231,15 @@ export default function PermanentDrawerLeft({  create, connect, namedConnect }) 
                                 </ListItemButton>
                             </ListItem>
                     </List>
+                            <Divider />
+                            {state.person && (
+                                <div className='flex flex-col items-center py-5'>
+                                    <h1>{nodeList.singleNode.firstName}</h1>
+                                    <p>{nodeList.singleNode.age}</p>
+                                    <p>{nodeList.singleNode.city} , {nodeList.singleNode.state}</p>
+                                </div>
+                            )}
+                            <Divider />
                 </Drawer>
             </Box>
         </ThemeProvider>

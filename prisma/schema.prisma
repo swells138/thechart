@@ -11,20 +11,15 @@ datasource db {
   relationMode = "prisma"
 }
 
-// model Person {
-//   id   Int    @id @default(autoincrement())
-//   name String
-// }
-
-// model Connection {
-//   id        Int    @id @default(autoincrement())
-//   personOne String
-//   personTwo String
-// }
-
 model Person {
   id                     Int          @id @default(autoincrement())
-  name                   String
+  firstName              String
+  lastName               String
+  email                  String
+  color                  String
+  city                   String
+  state                  String
+  age                    String
   connectionsAsPersonOne Connection[] @relation("PersonOneConnections")
   connectionsAsPersonTwo Connection[] @relation("PersonTwoConnections")
 }

@@ -27,11 +27,23 @@ async function getOneNode(node) {
 
 async function create(event) {
     "use server"
-    var inputValue = event.get("name");
+    var nameValue = event.get("name");
+    var lastNameValue = event.get("last");
+    var emailValue = event.get("email")
+    var colorValue = event.get("color");
+    var ageValue = event.get("age");
+    var cityValue = event.get("city");
+    var stateValue = event.get("state");
 
     await prisma.person.create({
         data: {
-            name: inputValue
+            firstName: nameValue,
+            lastName: lastNameValue,
+            email: emailValue,
+            color: colorValue,
+            age: ageValue,
+            city: cityValue,
+            state: stateValue
         }
     })
 }
@@ -43,13 +55,13 @@ async function createConnection(event) {
     // Query the database to find personOne and personTwo based on names
     const personOne = await prisma.person.findFirst({
         where: {
-            name: inputValueOne,
+            firstName: inputValueOne,
         },
     });
 
     const personTwo = await prisma.person.findFirst({
         where: {
-            name: inputValueTwo,
+            firstName: inputValueTwo,
         },
     });
 
@@ -83,8 +95,8 @@ async function getConnectionNames() {
         const connectionsWithNamesAndPersons = connectionsWithNames.map(connection => {
             return {
                 id: connection.id,
-                personOne: connection.personOneDetails.name,
-                personTwo: connection.personTwoDetails.name,
+                personOne: connection.personOneDetails.firstName,
+                personTwo: connection.personTwoDetails.firstName,
             };
         });
 
