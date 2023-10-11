@@ -5,30 +5,57 @@ import Graph from "graphology";
 import { useLoadGraph, SearchControl, ControlsContainer, useRegisterEvents } from "@react-sigma/core";
 import { useEffect, useState  } from "react";
 
-const MyGraph = ({ data, rel }) => {
+const MyGraph = ({ sendNode }) => {
 const [node, setNode] = useState(1)
-console.log(node)
 
 const onNodeClick = (node) => {
   setNode(node)
-  };
+  sendNode(node)
+};
 
-  const LoadGraph = ({ relationships, connections, onNodeClick  }) => {
-   
+  const LoadGraph = ({  onNodeClick  }) => {
+
+    const [nodeData, setNodeData] = useState({nodeDataArray:[], connectionArray:[]})
+    
     const loadGraph = useLoadGraph();
     const graph = new Graph();
     const registerEvents = useRegisterEvents();
+    
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const [nodeResponse, connectionResponse] = await Promise.all([
+            fetch(`http://localhost:3000/api/node`),
+            fetch(`http://localhost:3000/api/connection`)
+          ]);
+    
+          if (!nodeResponse.ok || !connectionResponse.ok) {
+            throw new Error(`HTTP error! status: ${nodeResponse.status} or ${connectionResponse.status}`);
+          }
+    
+          const [nodeData, connectionData] = await Promise.all([
+            nodeResponse.json(),
+            connectionResponse.json()
+          ]);
+    
+          console.log(nodeData, 'fetching nodes');
+          console.log(connectionData, 'fetching connections');
+    
+          setNodeData(prev => ({
+            ...prev,
+            nodeDataArray: nodeData,
+            connectionArray: connectionData
+          }));
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+    
+      fetchData();
+    }, [registerEvents]);
+    
 
-  
-    useEffect(()=>{
-      registerEvents({
-        clickNode: (event) => {
-          onNodeClick(event.node)
-        } 
-      })
-    },[registerEvents])
-
-    relationships.map((person) => graph.addNode(person.id, {
+    nodeData.nodeDataArray.map((person) => graph.addNode(person.id, {
       x: Math.random(),
       y: Math.random(),
       size: 15,
@@ -36,11 +63,15 @@ const onNodeClick = (node) => {
       color: "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0")
     }));
 
-    connections.map((connection) =>
-      graph.addEdgeWithKey(connection.id.toString(),
-        connection.personOne, connection.personTwo))
+    nodeData.connectionArray.map((connection) => {
+      graph.addEdgeWithKey(
+        connection.id.toString(),
+        connection.personOne.toString(),
+        connection.personTwo.toString()
+        );
+    });
 
-    loadGraph(graph);
+loadGraph(graph);
 
   };
 
@@ -51,7 +82,7 @@ const onNodeClick = (node) => {
           <ControlsContainer position={"top-right"}>
             <SearchControl style={{ width: "200px" }} />
           </ControlsContainer>
-          <LoadGraph relationships={data} connections={rel} onNodeClick={onNodeClick} ></LoadGraph>
+          <LoadGraph  onNodeClick={onNodeClick} ></LoadGraph>
         </SigmaContainer>
       </div>
     </>

@@ -21,6 +21,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
+
 const drawerWidth = 240;
 const darkTheme = createTheme({
     palette: {
@@ -28,7 +29,7 @@ const darkTheme = createTheme({
     },
 });
 
-export default function PermanentDrawerLeft({ data, rel, create, connect,namedConnect }) {
+export default function PermanentDrawerLeft({  create, connect, namedConnect }) {
     const [node, showNode] = useState(false)
     const [connectButton, showConnect] = useState(false)
 
@@ -45,14 +46,31 @@ export default function PermanentDrawerLeft({ data, rel, create, connect,namedCo
         if (connect) {
           showConnect(false);
         }
-      }
+    }
     
-      function onConnectClicked() {
+    function onConnectClicked() {
         showConnect((prev) => !prev);
         if (node) {
           showNode(false);
         }
-      }
+    }
+    
+    function handleNodeSend(event) {
+        fetch(`http://localhost:3000/api/node/${event}`).then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Handle the JSON response data here
+            console.log(data);
+        })
+        .catch(error => {
+            // Handle errors here
+            console.error('Error:', error);
+        });
+    }
 
     return (
         <ThemeProvider theme={darkTheme}>
@@ -72,8 +90,7 @@ export default function PermanentDrawerLeft({ data, rel, create, connect,namedCo
                         <div className='flex justify-around columns-2 bg-stone-950'>
                             <div>
                                 <MyGraph 
-                                data={data} 
-                                rel={rel} 
+                                sendNode={handleNodeSend}
                                 ></MyGraph>
                             </div>
                             <div>
