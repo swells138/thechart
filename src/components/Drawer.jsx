@@ -20,7 +20,8 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
+import { Avatar, Table, TableCell, TableRow } from '@mui/material';
+import eddy from "../../public/eddy.jpg"
 
 const drawerWidth = 240;
 const darkTheme = createTheme({
@@ -106,6 +107,7 @@ export default function PermanentDrawerLeft({ create, connect, namedConnect }) {
     }
 
     return (
+        <>
         <ThemeProvider theme={darkTheme}>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
@@ -120,39 +122,6 @@ export default function PermanentDrawerLeft({ create, connect, namedConnect }) {
                             </Typography>
                         </Toolbar>
                     </div>
-                        <div className='flex justify-around columns-2 bg-stone-950'>
-                            <div>
-                                <MyGraph 
-                                sendNode={handleNodeSend}
-                                ></MyGraph>
-                            </div>
-                            <div>
-                                {state.node && !state.connectButton && (
-                                    <div>
-                                        <h1 className='text-2xl font-bold'>Your Nodes</h1>
-                                        <Divider />
-                                        <ul>
-                                            {nodeList.nodeListArray.map(item => (
-                                                <li className='p-1' key={item.id}>{item.firstName}</li>
-                                            ))}
-                                            <Divider />
-                                        </ul>
-                                    </div>
-                                )}
-                                {state.connectButton && !state.node && (
-                                    <div>
-                                        <h1 className='text-2xl font-bold'>Your Connections</h1>
-                                        <Divider />
-                                        <ul>
-                                            {namedConnect.map(item => (
-                                                <li className='p-1' key={item.id}>{item.personOne} + {item.personTwo}</li>
-                                                ))}
-                                        </ul>
-                                        <Divider />
-                                    </div>
-                                )}
-                            </div>
-                        </div>
                 </AppBar>
                 <Drawer
                     sx={{
@@ -234,14 +203,59 @@ export default function PermanentDrawerLeft({ create, connect, namedConnect }) {
                             <Divider />
                             {state.person && (
                                 <div className='flex flex-col items-center py-5'>
-                                    <h1>{nodeList.singleNode.firstName}</h1>
-                                    <p>{nodeList.singleNode.age}</p>
-                                    <p>{nodeList.singleNode.city} , {nodeList.singleNode.state}</p>
+                                    <h1 className='text-2xl'>{nodeList.singleNode.firstName}</h1>
+                                    <p>Age: {nodeList.singleNode.age}</p>
+                                    <p>Location: {nodeList.singleNode.city} {nodeList.singleNode.state}</p>
                                 </div>
                             )}
                             <Divider />
                 </Drawer>
             </Box>
+            <Box component="main"  sx={{ marginTop: `64px`, ml: `${drawerWidth}px` }}>
+            <div className='flex justify-around columns-2 bg-stone-950'>
+                            <div>
+                                <MyGraph 
+                                sendNode={handleNodeSend}
+                                ></MyGraph>
+                            </div>
+                            <div  style={{ height: "600px", width: "200px" }} className='text-white'>
+                            {state.node && !state.connectButton && (
+                                <div className="h-full overflow-y-auto">
+                                    <h1 className='text-2xl font-bold sticky top-0 bg-stone-950 z-10 p-4'>Your Nodes</h1>
+                                    <Divider />
+                                    <div className="table-container">
+                                        <Table>
+                                            {nodeList.nodeListArray.map(item => (
+                                                <TableRow className='flex flex-row items-center' key={item.id}>
+                                                    <Avatar alt={item.firstName} src={eddy}  sx={{ width: 35, height: 35 }} />
+                                                    <TableCell>
+                                                        {item.firstName}
+                                                    </TableCell>
+                                                </TableRow> 
+                                            ))}
+                                        </Table>
+                                    </div>
+                                </div>
+                            )}
+                                {state.connectButton && !state.node && (
+                                    <div className="h-full overflow-y-auto">
+                                        <h1 className='text-2xl font-bold'>Your Connections</h1>
+                                        <Divider />
+                                        <Table>
+                                            {namedConnect.map(item => (
+                                                <TableRow  >
+                                                    <TableCell className='p-1' key={item.id}>
+                                                        {item.personOne} + {item.personTwo}
+                                                    </TableCell>
+                                                </TableRow> 
+                                            ))}
+                                        </Table>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+            </Box>
         </ThemeProvider>
+        </>
     );
 }
