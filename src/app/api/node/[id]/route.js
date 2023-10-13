@@ -14,10 +14,11 @@ async function GET(request, { params }) {
         });
 
         if (user) {
-            const { id, firstName, city, state, color, age } = user;
+            const { id, firstName, lastName, city, state, color, age } = user;
             const json = {
                 id,
                 firstName,
+                lastName,
                 city,
                 state,
                 color,
