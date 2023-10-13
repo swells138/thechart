@@ -22,6 +22,9 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Avatar, Button, Table, TableCell, TableRow } from '@mui/material';
 import eddy from "../../public/eddy.jpg"
+import logo from '../app/favicon.ico'
+import Link from 'next/link'
+import Image from 'next/image'
 
 const drawerWidth = 240;
 const darkTheme = createTheme({
@@ -135,7 +138,11 @@ export default function PermanentDrawerLeft({ create, connect, namedConnect }) {
                         variant="permanent"
                         anchor="left"
                     >
-                        <Toolbar />
+                            <div className='py-1 ps-2'>
+                            <Link href='/'>
+                                    <Image width={55} height={55} src={logo} alt='the weird logo'></Image>
+                            </Link>
+                        </div>
                         <Divider />
                         <List>
                             <Accordion>
