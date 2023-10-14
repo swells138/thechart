@@ -1,16 +1,17 @@
 import { SigmaContainer } from "@react-sigma/core";
 import "@react-sigma/core/lib/react-sigma.min.css";
 import LoadGraph from "./LoadGraph"
-import {  SearchControl, ControlsContainer } from "@react-sigma/core";
-import {  useState  } from "react";
+import { SearchControl, ControlsContainer } from "@react-sigma/core";
+import { useState } from "react";
+
 
 const MyGraph = ({ sendNode }) => {
-const [node, setNode] = useState(1)
+  const [node, setNode] = useState(1)
 
-const onNodeClick = (node) => {
-  setNode(node)
-  sendNode(node)
-};
+  const onNodeClick = (node) => {
+    setNode(node)
+    sendNode(node)
+  };
 
   return (
     <>
@@ -19,7 +20,7 @@ const onNodeClick = (node) => {
           <ControlsContainer position={"top-right"}>
             <SearchControl style={{ width: "200px" }} />
           </ControlsContainer>
-          <LoadGraph  onNodeClick={onNodeClick} ></LoadGraph>
+          <LoadGraph onNodeClick={onNodeClick} ></LoadGraph>
         </SigmaContainer>
       </div>
     </>
