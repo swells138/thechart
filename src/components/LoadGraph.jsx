@@ -14,7 +14,7 @@ const LoadGraph = ({ onNodeClick }) => {
   useEffect(() => {
     registerEvents({
       clickNode: (event) => {
-        event.preventSigmaDefault
+        event.preventSigmaDefault()
         onNodeClick(event.node)
       }
     })

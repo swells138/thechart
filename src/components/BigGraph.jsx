@@ -1,87 +1,89 @@
 "use client"
-import React, { useEffect, useState } from "react";
+import React, {useState}  from "react";
 import "@react-sigma/core/lib/react-sigma.min.css";
-import { MultiDirectedGraph } from "graphology";
+import LoadBigGraph from "../components/LoadBigGraph"
+import eddy from "../../public/eddy.jpg"
 import {
     SigmaContainer,
     ControlsContainer,
     ZoomControl,
     SearchControl,
-    FullScreenControl,
+    FullScreenControl
 } from "@react-sigma/core";
+import { Avatar } from "@mui/material";
 
-const LoadGraphWithByProp = () => {
-    const [nodeData, setNodeData] = useState({ nodeDataArray: [], connectionArray: [] });
+const BigGraph = () => {
+    const [state, setState] = useState({
+        person: false,
+    });
+    const [nodeList, setNodeList] = useState({ singleNode: {} })
+    
 
-    useEffect(() => {
-
-        const fetchData = async () => {
-            try {
-                const [nodeResponse, connectionResponse] = await Promise.all([
-                    fetch(`http://localhost:3000/api/node`),
-                    fetch(`http://localhost:3000/api/connection`)
-                ]);
-
-                if (!nodeResponse.ok || !connectionResponse.ok) {
-                    throw new Error(`HTTP error! status: ${nodeResponse.status} or ${connectionResponse.status}`);
-                }
-
-                const [nodeData, connectionData] = await Promise.all([
-                    nodeResponse.json(),
-                    connectionResponse.json()
-                ]);
-
-                setNodeData({
-                    nodeDataArray: nodeData,
-                    connectionArray: connectionData
-                });
-            } catch (error) {
-                console.error('Error:', error);
+    function handleNodeSend(event) {
+        fetch(`http://localhost:3000/api/node/${event}`).then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        };
-
-        fetchData();
-
-        return () => {
-
-        };
-    }, []);
-
-
-    const graph = new MultiDirectedGraph();
-
-
-    nodeData.nodeDataArray.forEach((person) => {
-        graph.addNode(person.id.toString(), {
-            x: Math.random(),
-            y: Math.random(),
-            size: 15,
-            label: person.firstName,
-            color: person.color
-        });
-    });
-
-    nodeData.connectionArray.forEach((connection) => {
-        graph.addEdgeWithKey(
-            connection.id.toString(),
-            connection.personOne.toString(),
-            connection.personTwo.toString()
-        );
-    });
+            return response.json();
+        })
+            .then(data => {
+                setNodeList((prev) => {
+                    let nd = { ...prev }
+                    nd.singleNode = data
+                    return nd
+                })
+                setState((prev) => {
+                    let nd = { ...prev }
+                    nd.person = true
+                    return nd
+                })
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
     return (
         <>
-            <SigmaContainer style={{ height: "600px", width: "900px" }} graph={graph}>
-                <ControlsContainer position={"top-right"}>
-                    <SearchControl style={{ width: "200px" }} />
-                </ControlsContainer>
-                <ControlsContainer position={"bottom-right"}>
-                    <ZoomControl />
-                    <FullScreenControl />
-                </ControlsContainer>
-            </SigmaContainer>
+        <div className="text-white flex flex-col items-center">
+            <h1 className="text-3xl">Welcome to your Community Chart</h1>
+            <h1>Click on a Node to find out more</h1>
+        </div>
+        <div className="flex text-white">
+            <div>
+                
+            </div>
+            <div >
+                <SigmaContainer style={{ height: "600px", width: "900px" }}>
+                    <ControlsContainer position={"top-right"}>
+                        <SearchControl style={{ width: "200px" }} />
+                    </ControlsContainer>
+                    <ControlsContainer position={"bottom-right"}>
+                        <ZoomControl />
+                        <FullScreenControl />
+                    </ControlsContainer>
+                    <LoadBigGraph
+                      onNodeClick={handleNodeSend}
+                    ></LoadBigGraph>
+                </SigmaContainer>
+            </div>
+            <div >
+                {state.person && (
+                                <div className='flex flex-col items-center p-5'>
+                                    <Avatar src={eddy} alt={nodeList.singleNode.firstName}></Avatar>
+                                    <h1 className='text-2xl'>{nodeList.singleNode.firstName} {nodeList.singleNode.lastName}</h1>
+                                    <p>Age: {nodeList.singleNode.age}</p>
+                                    <p>Location: {nodeList.singleNode.city} {nodeList.singleNode.state}</p>
+                                    <div>
+                                        {/* <Button className='py-1' color='secondary'>Edit</Button>
+                                        <Button color="secondary">Delete</Button> */}
+                                    </div>
+                                </div>
+                            )}
+            </div>
+        </div>
         </>
     )
 };
 
-export default LoadGraphWithByProp;
+export default BigGraph;
