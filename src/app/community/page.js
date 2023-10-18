@@ -9,7 +9,7 @@ const page = () => {
             <Navbar></Navbar>
             <h1>Community Chart</h1>
             <div className='flex flex-col items-center'>
-                {/* <BigGraph ></BigGraph> */}
+                <BigGraph ></BigGraph>
             </div>
         </>
     )

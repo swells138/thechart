@@ -2,19 +2,48 @@ import React from 'react'
 import "@react-sigma/core/lib/react-sigma.min.css";
 import Graph from "graphology";
 import { useLoadGraph, useRegisterEvents, useSigma } from "@react-sigma/core";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 const LoadBigGraph = ({ onNodeClick }) => {
   const [nodeData, setNodeData] = useState({ nodeDataArray: [], connectionArray: [] });
   const loadGraph = useLoadGraph();
-  const graph = new Graph();
+  const graph = useMemo(() => new Graph(), []); // Memoize the graph instance
   const registerEvents = useRegisterEvents();
   const sigma = useSigma();
   const [draggedNode, setDraggedNode] = useState();
 
+  useEffect(()=>{
+    const fetchData = async () => {
+      try {
+        const [nodeResponse, connectionResponse] = await Promise.all([
+          fetch(`http://localhost:3000/api/node`),
+          fetch(`http://localhost:3000/api/connection`)
+        ]);
+
+        if (!nodeResponse.ok || !connectionResponse.ok) {
+          throw new Error(`HTTP error! status: ${nodeResponse.status} or ${connectionResponse.status}`);
+        }
+
+        const [nodeData, connectionData] = await Promise.all([
+          nodeResponse.json(),
+          connectionResponse.json()
+        ]);
+
+        setNodeData({
+          nodeDataArray: nodeData,
+          connectionArray: connectionData
+        });
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchData();
+  },[])
+
   useEffect(() => {
     registerEvents({
-      clickNode: (event) => {
+      doubleClickNode: (event) => {
         event.preventSigmaDefault()
         onNodeClick(event.node)
       },
@@ -70,52 +99,34 @@ const LoadBigGraph = ({ onNodeClick }) => {
       },
     })
 
-    const fetchData = async () => {
-      try {
-        const [nodeResponse, connectionResponse] = await Promise.all([
-          fetch(`http://localhost:3000/api/node`),
-          fetch(`http://localhost:3000/api/connection`)
-        ]);
-
-        if (!nodeResponse.ok || !connectionResponse.ok) {
-          throw new Error(`HTTP error! status: ${nodeResponse.status} or ${connectionResponse.status}`);
-        }
-
-        const [nodeData, connectionData] = await Promise.all([
-          nodeResponse.json(),
-          connectionResponse.json()
-        ]);
-
-        setNodeData({
-          nodeDataArray: nodeData,
-          connectionArray: connectionData
-        });
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
-    fetchData();
-
   }, [registerEvents, sigma, draggedNode]);
 
-  nodeData.nodeDataArray.forEach((person) => {
-    graph.addNode(person.id.toString(), {
-      x: Math.random(),
-      y: Math.random(),
-      size: 15,
-      label: person.firstName,
-      color: person.color
+  useEffect(() => {
+    nodeData.nodeDataArray.forEach((person) => {
+      graph.addNode(person.id.toString(), {
+        x: Math.random(),
+        y: Math.random(),
+        size: 15,
+        label: person.firstName,
+        color: person.color
+      });
     });
-  });
 
-  nodeData.connectionArray.forEach((connection) => {
-    graph.addEdgeWithKey(
-      connection.id.toString(),
-      connection.personOne.toString(),
-      connection.personTwo.toString()
-    );
-  })
+    nodeData.connectionArray.forEach((connection) => {
+      graph.addEdgeWithKey(
+        connection.id.toString(),
+        connection.personOne.toString(),
+        connection.personTwo.toString()
+      );
+    });
+
   loadGraph(graph);
+
+  return () => {
+    graph.clear();
+  };
+  
+}, [nodeData, loadGraph, graph]);
+
 }
 export default LoadBigGraph

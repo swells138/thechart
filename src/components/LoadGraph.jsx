@@ -1,23 +1,78 @@
 import React from 'react'
 import "@react-sigma/core/lib/react-sigma.min.css";
 import Graph from "graphology";
-import { useLoadGraph, useRegisterEvents } from "@react-sigma/core";
-import { useEffect, useState } from "react";
+import { useLoadGraph, useRegisterEvents,useSigma } from "@react-sigma/core";
+import { useEffect, useState,useMemo } from "react";
 
 const LoadGraph = ({ onNodeClick }) => {
-  const [nodeData, setNodeData] = useState({ nodeDataArray: [], connectionArray: [] })
-
+  const [nodeData, setNodeData] = useState({ nodeDataArray: [], connectionArray: [] });
+  const [draggedNode, setDraggedNode] = useState();
   const loadGraph = useLoadGraph();
-  const graph = new Graph();
+  const sigma = useSigma();
+  const graph = useMemo(() => new Graph(), []); // Memoize the graph instance
   const registerEvents = useRegisterEvents();
 
-  useEffect(() => {
+
+  useEffect(()=>{
     registerEvents({
-      clickNode: (event) => {
+      doubleClickNode: (event) => {
         event.preventSigmaDefault()
         onNodeClick(event.node)
-      }
+      },
+      downNode: (e) => {
+        setDraggedNode(e.node);
+        sigma.getGraph().setNodeAttribute(e.node, "highlighted", true);
+      },
+      mouseup: (e) => {
+        if (draggedNode) {
+          setDraggedNode(null);
+          sigma.getGraph().removeNodeAttribute(draggedNode, "highlighted");
+        }
+      },
+      mousedown: (e) => {
+        // Disable the autoscale at the first down interaction
+        if (!sigma.getCustomBBox()) sigma.setCustomBBox(sigma.getBBox());
+      },
+      mousemove: (e) => {
+        if (draggedNode) {
+          // Get new position of node
+          const pos = sigma.viewportToGraph(e);
+          sigma.getGraph().setNodeAttribute(draggedNode, "x", pos.x);
+          sigma.getGraph().setNodeAttribute(draggedNode, "y", pos.y);
+
+          // Prevent sigma to move camera:
+          e.preventSigmaDefault();
+          e.original.preventDefault();
+          e.original.stopPropagation();
+        }
+      },
+      touchup: (e) => {
+        if (draggedNode) {
+          setDraggedNode(null);
+          sigma.getGraph().removeNodeAttribute(draggedNode, "highlighted");
+        }
+      },
+      touchdown: (e) => {
+        // Disable the autoscale at the first down interaction
+        if (!sigma.getCustomBBox()) sigma.setCustomBBox(sigma.getBBox());
+      },
+      touchmove: (e) => {
+        if (draggedNode) {
+          // Get new position of node
+          const pos = sigma.viewportToGraph(e);
+          sigma.getGraph().setNodeAttribute(draggedNode, "x", pos.x);
+          sigma.getGraph().setNodeAttribute(draggedNode, "y", pos.y);
+
+          // Prevent sigma to move camera:
+          e.preventSigmaDefault();
+          e.original.preventDefault();
+          e.original.stopPropagation();
+        }
+      },
     })
+  },[registerEvents, sigma, draggedNode])
+
+  useEffect(() => {
 
     const fetchData = async () => {
       try {
@@ -48,24 +103,32 @@ const LoadGraph = ({ onNodeClick }) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    nodeData.nodeDataArray.forEach((person) => {
+      graph.addNode(person.id.toString(), {
+        x: Math.random(),
+        y: Math.random(),
+        size: 15,
+        label: person.firstName,
+        color: person.color
+      });
+    });
 
-  nodeData.nodeDataArray.map((person) => graph.addNode(person.id, {
-    x: Math.random(),
-    y: Math.random(),
-    size: 15,
-    label: person.firstName,
-    color: person.color
-  }));
-
-  nodeData.connectionArray.map((connection) => {
-    graph.addEdgeWithKey(
-      connection.id.toString(),
-      connection.personOne.toString(),
-      connection.personTwo.toString()
-    );
-  });
+    nodeData.connectionArray.forEach((connection) => {
+      graph.addEdgeWithKey(
+        connection.id.toString(),
+        connection.personOne.toString(),
+        connection.personTwo.toString()
+      );
+    });
 
   loadGraph(graph);
+
+  return () => {
+    graph.clear();
+  };
+  
+}, [nodeData, loadGraph, graph]);
 
 };
 
