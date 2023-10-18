@@ -33,33 +33,43 @@ const darkTheme = createTheme({
     },
 });
 
-export default function PermanentDrawerLeft({ create, connect, namedConnect }) {
+export default function PermanentDrawerLeft({ create, connect }) {
     const [state, setState] = useState({
         node: false,
         connectButton: false,
         person: false
     });
-    const [nodeList, setNodeList] = useState({ nodeListArray: [], singleNode: {} })
+    const [nodeList, setNodeList] = useState({ nodeListArray: [], singleNode: {}, namedConnect: [] })
 
     useEffect(() => {
-        fetch(`http://localhost:3000/api/node`).then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-            .then(data => {
-                console.log(data, 'fetching nodes')
-                setNodeList((prev) => {
-                    let nd = { ...prev }
-                    nd.nodeListArray = data
-                    return nd
-                })
-            })
-            .catch(error => {
+        async function fetchData() {
+            try {
+                const [namedConnectionsResponse, nodeResponse] = await Promise.all([
+                    fetch(`http://localhost:3000/api/namedconnections`),
+                    fetch(`http://localhost:3000/api/node`),
+                ]);
+
+                if (!namedConnectionsResponse.ok || !nodeResponse.ok) {
+                    throw new Error(`HTTP error! status: ${namedConnectionsResponse.status} or ${nodeResponse.status}`);
+                }
+
+                const [namedConnectionsData, nodeData] = await Promise.all([
+                    namedConnectionsResponse.json(),
+                    nodeResponse.json(),
+                ]);
+
+                setNodeList((prev) => ({
+                    ...prev,
+                    nodeListArray: nodeData,
+                    namedConnect: namedConnectionsData
+                }));
+            } catch (error) {
                 console.error('Error:', error);
-            });
-    }, [])
+            }
+        }
+
+        fetchData();
+    }, []);
 
     function handleCreate(event) {
         create(event)
@@ -138,9 +148,9 @@ export default function PermanentDrawerLeft({ create, connect, namedConnect }) {
                         variant="permanent"
                         anchor="left"
                     >
-                            <div className='py-1 ps-2'>
+                        <div className='py-1 ps-2'>
                             <Link href='/'>
-                                    <Image width={55} height={55} src={logo} alt='the weird logo'></Image>
+                                <Image width={55} height={55} src={logo} alt='the weird logo'></Image>
                             </Link>
                         </div>
                         <Divider />
@@ -253,9 +263,9 @@ export default function PermanentDrawerLeft({ create, connect, namedConnect }) {
                                     <h1 className='text-2xl font-bold sticky top-0 bg-stone-950 z-10 p-4'>Connections</h1>
                                     <Divider />
                                     <Table>
-                                        {namedConnect.map(item => (
-                                            <TableRow className='flex flex-row items-center ' >
-                                                <TableCell className='py-2' key={item.id}>
+                                        {nodeList.namedConnect.map(item => (
+                                            <TableRow className='flex flex-row items-center ' key={item.id} >
+                                                <TableCell className='py-2' >
                                                     {item.personOne} + {item.personTwo}
                                                 </TableCell>
                                             </TableRow>

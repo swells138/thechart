@@ -22,23 +22,12 @@ export default async function page() {
         }
     }
 
-    async function getConnectionNamesData() {
-        'use server'
-        try {
-            return getConnectionNames()
-        } catch (error) {
-            console.error("error poop")
-        }
-    }
-    const connectionsListNames = await getConnectionNamesData()
-
     return (
         <>
             <div>
                 <Drawer
                     connect={createNodeRelationship}
                     create={createNode}
-                    namedConnect={connectionsListNames}
                 ></Drawer>
             </div>
         </>

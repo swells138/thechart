@@ -56,7 +56,6 @@ const LoadGraph = ({ onNodeClick }) => {
     label: person.firstName,
     color: person.color
   }));
-  console.log(nodeData.nodeDataArray)
 
   nodeData.connectionArray.map((connection) => {
     graph.addEdgeWithKey(
