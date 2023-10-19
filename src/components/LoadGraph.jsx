@@ -73,35 +73,29 @@ const LoadGraph = ({ onNodeClick }) => {
   },[registerEvents, sigma, draggedNode])
 
   useEffect(() => {
-
     const fetchData = async () => {
       try {
-        const [nodeResponse, connectionResponse] = await Promise.all([
-          fetch(`http://localhost:3000/api/node`),
-          fetch(`http://localhost:3000/api/connection`)
-        ]);
-
-        if (!nodeResponse.ok || !connectionResponse.ok) {
-          throw new Error(`HTTP error! status: ${nodeResponse.status} or ${connectionResponse.status}`);
+        const nodeResponse = await fetch(`http://localhost:3000/api/usersconnections`);
+  
+        if (!nodeResponse.ok) {
+          throw new Error(`HTTP error! status: ${nodeResponse.status}`);
         }
-
-        const [nodeData, connectionData] = await Promise.all([
-          nodeResponse.json(),
-          connectionResponse.json()
-        ]);
-
+  
+        const nodeData = await nodeResponse.json();
+  
         setNodeData(prev => ({
           ...prev,
-          nodeDataArray: nodeData,
-          connectionArray: connectionData
+          nodeDataArray: nodeData.users,
+          connectionArray: nodeData.connections
         }));
       } catch (error) {
         console.error('Error:', error);
       }
     };
-
+  
     fetchData();
   }, []);
+  
 
   useEffect(() => {
     nodeData.nodeDataArray.forEach((person) => {

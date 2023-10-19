@@ -10,7 +10,7 @@ import {
     SearchControl,
     FullScreenControl
 } from "@react-sigma/core";
-import { Avatar } from "@mui/material";
+import { Avatar, Typography } from "@mui/material";
 
 const BigGraph = () => {
     const [state, setState] = useState({
@@ -46,8 +46,7 @@ const BigGraph = () => {
     return (
         <>
         <div className="text-white flex flex-col items-center">
-            <h1 className="text-3xl">Welcome to your Community Chart</h1>
-            <h1>Click on a Node to find out more</h1>
+        <Typography variant="h3">The Chart</Typography>
         </div>
         <div className="flex text-white">
             <div>
