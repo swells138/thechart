@@ -29,16 +29,16 @@ const Navbar = () => {
                                 href="#"
                                 sx={{ my: 1, mx: 1.5 }}
                             >
-                                <h1 className='text-gray-500 font-bold'>Search</h1>
+                                <h1 className='text-gray-500 font-bold'>Invites</h1>
                             </Link>
                         </div>
                         <div>
                             <Link
                                 variant="button"
-                                href="#"
+                                href="/charts"
                                 sx={{ my: 1, mx: 1.5 }}
                             >
-                                <h1 className='text-gray-500 font-bold'>Career</h1>
+                                <h1 className='text-gray-500 font-bold'>Charts</h1>
                             </Link>
                         </div>
                         <div>

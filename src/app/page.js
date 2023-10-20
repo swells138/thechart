@@ -14,7 +14,7 @@ export default function Home() {
               The Chart
             </h1>
             <p className="py-5 text-xl leading-normal text-gray-500 lg:text-xl xl:text-2xl dark:text-gray-300">
-              The Chart is a website made for the slutty lesbians that watched the L-word that want to keep track of their hoes
+              The Chart is a replica of the famous chart from the 90s queer TV show the L-word for keeping track of their ex lovers.
             </p>
 
             <div className="flex flex-col px-2 items-start space-y-3 sm:space-x-4 sm:space-y-0 sm:items-center sm:flex-row">

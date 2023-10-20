@@ -5,9 +5,22 @@ const nextConfig = {
 module.exports = nextConfig
 
 module.exports = {
-    reactStrictMode: false,
+    // ... other webpack configuration options
+    reactStrictMode: false, // React strict mode is disabled
 
     experimental: {
-        serverActions: true,
+        serverActions: true, // Experimental server actions are enabled
     },
-}
+
+    webpack: (config, { webpack }) => {
+        // Define the Markdown loader rule
+        config.module.rules.push({
+            test: /\.md$/,
+            use: ['html-loader', 'markdown-loader'],
+        });
+
+        return config;
+    },
+};
+
+
