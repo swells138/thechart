@@ -46,7 +46,7 @@ export default function PermanentDrawerLeft({ create, connect }) {
             try {
                 const [namedConnectionsResponse, nodeResponse] = await Promise.all([
                     fetch(`http://localhost:3000/api/namedconnections`),
-                    fetch(`http://localhost:3000/api/node`),
+                    fetch(`http://localhost:3000/api/usersconnections`),
                 ]);
 
                 if (!namedConnectionsResponse.ok || !nodeResponse.ok) {
@@ -57,10 +57,11 @@ export default function PermanentDrawerLeft({ create, connect }) {
                     namedConnectionsResponse.json(),
                     nodeResponse.json(),
                 ]);
+                console.log("sydney",nodeData)
 
                 setNodeList((prev) => ({
                     ...prev,
-                    nodeListArray: nodeData,
+                    nodeListArray: nodeData.users,
                     namedConnect: namedConnectionsData
                 }));
             } catch (error) {
@@ -87,13 +88,13 @@ export default function PermanentDrawerLeft({ create, connect }) {
         }));
     }
 
-    function onConnectClicked() {
-        setState(prevState => ({
-            ...prevState,
-            connectButton: !prevState.connectButton,
-            node: false
-        }));
-    }
+    // function onConnectClicked() {
+    //     setState(prevState => ({
+    //         ...prevState,
+    //         connectButton: !prevState.connectButton,
+    //         node: false
+    //     }));
+    // }
 
     function handleNodeSend(event) {
         fetch(`http://localhost:3000/api/node/${event}`).then(response => {
@@ -208,14 +209,14 @@ export default function PermanentDrawerLeft({ create, connect }) {
                                     <ListItemText primary={"Nodes"} />
                                 </ListItemButton>
                             </ListItem>
-                            <ListItem disablePadding>
+                            {/* <ListItem disablePadding>
                                 <ListItemButton onClick={onConnectClicked}>
                                     <ListItemIcon>
                                         <MailIcon />
                                     </ListItemIcon>
                                     <ListItemText primary={"Connections"} />
                                 </ListItemButton>
-                            </ListItem>
+                            </ListItem> */}
                         </List>
                         <Divider />
                         {state.person && (

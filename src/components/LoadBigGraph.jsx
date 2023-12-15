@@ -1,18 +1,18 @@
-import React from 'react'
+import React, { useEffect, useState, useMemo } from "react";
 import "@react-sigma/core/lib/react-sigma.min.css";
 import Graph from "graphology";
+import { forceSimulation, forceLink, forceManyBody, forceCenter } from "d3-force";
 import { useLoadGraph, useRegisterEvents, useSigma } from "@react-sigma/core";
-import { useEffect, useState, useMemo } from "react";
 
 const LoadBigGraph = ({ onNodeClick }) => {
   const [nodeData, setNodeData] = useState({ nodeDataArray: [], connectionArray: [] });
   const loadGraph = useLoadGraph();
-  const graph = useMemo(() => new Graph(), []); // Memoize the graph instance
+  const graph = useMemo(() => new Graph(), []);
   const registerEvents = useRegisterEvents();
   const sigma = useSigma();
   const [draggedNode, setDraggedNode] = useState();
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const [nodeResponse, connectionResponse] = await Promise.all([
@@ -30,8 +30,12 @@ const LoadBigGraph = ({ onNodeClick }) => {
         ]);
 
         setNodeData({
-          nodeDataArray: nodeData,
-          connectionArray: connectionData
+          nodeDataArray: nodeData.map(node => ({ ...node, id: node.id.toString() })),
+          connectionArray: connectionData.map(connection => ({
+            ...connection,
+            source: connection.personOne.toString(),
+            target: connection.personTwo.toString()
+          }))
         });
       } catch (error) {
         console.error('Error:', error);
@@ -39,7 +43,7 @@ const LoadBigGraph = ({ onNodeClick }) => {
     };
 
     fetchData();
-  },[])
+  }, []);
 
   useEffect(() => {
     registerEvents({
@@ -98,7 +102,6 @@ const LoadBigGraph = ({ onNodeClick }) => {
         }
       },
     })
-
   }, [registerEvents, sigma, draggedNode]);
 
   useEffect(() => {
@@ -120,13 +123,28 @@ const LoadBigGraph = ({ onNodeClick }) => {
       );
     });
 
-  loadGraph(graph);
+    const simulation = forceSimulation(nodeData.nodeDataArray)
+      .force("link", forceLink(nodeData.connectionArray).id(d => d.id))
+      .force("charge", forceManyBody())
+      .force("center", forceCenter(450, 300)); // Assuming your container is 900x600
 
-  return () => {
-    graph.clear();
-  };
-  
-}, [nodeData, loadGraph, graph]);
+    simulation.on("tick", () => {
+      sigma.getGraph().forEachNode((node, attributes) => {
+        const d3Node = nodeData.nodeDataArray.find(d => d.id === node);
+        sigma.getGraph().setNodeAttribute(node, "x", d3Node.x);
+        sigma.getGraph().setNodeAttribute(node, "y", d3Node.y);
+      });
+    });
 
-}
-export default LoadBigGraph
+    loadGraph(graph);
+
+    return () => {
+      graph.clear();
+      simulation.stop();
+    };
+  }, [nodeData, loadGraph, graph]);
+
+  return null;
+};
+
+export default LoadBigGraph;

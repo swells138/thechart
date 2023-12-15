@@ -1,6 +1,7 @@
 import React from 'react'
 import "@react-sigma/core/lib/react-sigma.min.css";
 import Graph from "graphology";
+import { forceSimulation, forceLink, forceManyBody, forceCenter } from "d3-force";
 import { useLoadGraph, useRegisterEvents,useSigma } from "@react-sigma/core";
 import { useEffect, useState,useMemo } from "react";
 
@@ -116,10 +117,31 @@ const LoadGraph = ({ onNodeClick }) => {
       );
     });
 
+    const transformedNodes = nodeData.nodeDataArray.map(node => ({ ...node, id: node.id.toString() }));
+    const transformedConnections = nodeData.connectionArray.map(connection => ({
+      ...connection,
+      source: connection.personOne.toString(),
+      target: connection.personTwo.toString()
+    }));
+
+    const simulation = forceSimulation(transformedNodes)
+    .force("link", forceLink(transformedConnections).id(d => d.id))
+    .force("charge", forceManyBody())
+    .force("center", forceCenter(450, 300)); // Adjust to match the dimensions of your Sigma container
+
+  simulation.on("tick", () => {
+    sigma.getGraph().forEachNode((node, attributes) => {
+      const d3Node = transformedNodes.find(d => d.id === node);
+      sigma.getGraph().setNodeAttribute(node, "x", d3Node.x);
+      sigma.getGraph().setNodeAttribute(node, "y", d3Node.y);
+    });
+  });
+
   loadGraph(graph);
 
   return () => {
     graph.clear();
+    simulation.stop();
   };
   
 }, [nodeData, loadGraph, graph]);
