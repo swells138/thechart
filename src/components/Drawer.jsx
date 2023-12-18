@@ -25,6 +25,7 @@ import eddy from "../../public/eddy.jpg"
 import logo from '../app/favicon.ico'
 import Link from 'next/link'
 import Image from 'next/image'
+import { create } from 'domain';
 
 const drawerWidth = 240;
 const darkTheme = createTheme({
@@ -33,7 +34,7 @@ const darkTheme = createTheme({
     },
 });
 
-export default function PermanentDrawerLeft({ create, connect }) {
+export default function PermanentDrawerLeft({ create,connect }) {
     const [state, setState] = useState({
         node: false,
         connectButton: false,
@@ -76,9 +77,10 @@ export default function PermanentDrawerLeft({ create, connect }) {
         create(event)
     }
 
+
     function handleConnect(event) {
         connect(event)
-    }
+    }    
 
     function onNodeClicked() {
         setState(prevState => ({
@@ -87,14 +89,6 @@ export default function PermanentDrawerLeft({ create, connect }) {
             connectButton: false
         }));
     }
-
-    // function onConnectClicked() {
-    //     setState(prevState => ({
-    //         ...prevState,
-    //         connectButton: !prevState.connectButton,
-    //         node: false
-    //     }));
-    // }
 
     function handleNodeSend(event) {
         fetch(`http://localhost:3000/api/node/${event}`).then(response => {

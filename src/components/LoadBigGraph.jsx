@@ -110,7 +110,7 @@ const LoadBigGraph = ({ onNodeClick }) => {
         x: Math.random(),
         y: Math.random(),
         size: 15,
-        label: person.firstName,
+        label: person.firstName + ' ' + person.lastName,
         color: person.color
       });
     });
