@@ -75,12 +75,8 @@ export default function PermanentDrawerLeft({ create,connect }) {
 
     function handleCreate(event) {
         create(event)
+        
     }
-
-
-    function handleConnect(event) {
-        connect(event)
-    }    
 
     function onNodeClicked() {
         setState(prevState => ({
@@ -173,25 +169,6 @@ export default function PermanentDrawerLeft({ create,connect }) {
                                     </form>
                                 </AccordionDetails>
                             </Accordion>
-                            <Accordion>
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1a-content"
-                                    id="panel1a-header"
-                                >
-                                    <Typography>Add a Connection</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                    <form id='form' action={handleConnect}>
-                                        <div className='flex flex-col mx-8'>
-                                            <label htmlFor="name" className="mb-2">Connect a Node</label>
-                                            <input className='border rounded text-black' id="personOne" name='personOne' placeholder='Person One'></input>
-                                            <input className='border rounded text-black mt-2' id="personTwo" name='personTwo' placeholder='Person Two'></input>
-                                            <Button color='secondary' className='p-2 mt-3' type='submit'>Add Connection</Button>
-                                        </div>
-                                    </form>
-                                </AccordionDetails>
-                            </Accordion>
                         </List>
                         <Divider />
                         <List>
@@ -203,14 +180,6 @@ export default function PermanentDrawerLeft({ create,connect }) {
                                     <ListItemText primary={"Nodes"} />
                                 </ListItemButton>
                             </ListItem>
-                            {/* <ListItem disablePadding>
-                                <ListItemButton onClick={onConnectClicked}>
-                                    <ListItemIcon>
-                                        <MailIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Connections"} />
-                                </ListItemButton>
-                            </ListItem> */}
                         </List>
                         <Divider />
                         {state.person && (

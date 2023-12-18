@@ -12,7 +12,8 @@ async function create(event) {
     var cityValue = event.get("city");
     var stateValue = event.get("state");
 
-    await prisma.person.create({
+    // Create a new user
+    const newUser = await prisma.person.create({
         data: {
             firstName: nameValue,
             lastName: lastNameValue,
@@ -22,46 +23,58 @@ async function create(event) {
             city: cityValue,
             state: stateValue
         }
-    })
-}
-
-async function createConnection(event) {
-    const inputValueOne = event.get("personOne");
-    const inputValueTwo = event.get("personTwo");
-
-    // Query the database to find personOne and personTwo based on names
-    const personOne = await prisma.person.findFirst({
-        where: {
-            firstName: inputValueOne,
-        },
     });
 
-    const personTwo = await prisma.person.findFirst({
-        where: {
-            firstName: inputValueTwo,
-        },
-    });
-
-    // Check if both persons were found
-    if (!personOne || !personTwo) {
-        throw new Error("Invalid person names provided");
-    }
-
-    // Create the connection using the retrieved person IDs and correct format
+    // Connect the new user to an existing user with the given ID
     await prisma.connection.create({
         data: {
             personOneDetails: {
-                connect: { id: personOne.id }
+                connect: { id: newUser.id }
             },
             personTwoDetails: {
-                connect: { id: personTwo.id }
+                connect: { id: 2 }
             }
         },
     });
 }
 
+// async function createConnection(event) {
+//     const inputValueOne = event.get("personOne");
+//     const inputValueTwo = event.get("personTwo");
+
+//     // Query the database to find personOne and personTwo based on names
+//     const personOne = await prisma.person.findFirst({
+//         where: {
+//             firstName: inputValueOne,
+//         },
+//     });
+
+//     const personTwo = await prisma.person.findFirst({
+//         where: {
+//             firstName: inputValueTwo,
+//         },
+//     });
+
+//     // Check if both persons were found
+//     if (!personOne || !personTwo) {
+//         throw new Error("Invalid person names provided");
+//     }
+
+//     // Create the connection using the retrieved person IDs and correct format
+//     await prisma.connection.create({
+//         data: {
+//             personOneDetails: {
+//                 connect: { id: personOne.id }
+//             },
+//             personTwoDetails: {
+//                 connect: { id: personTwo.id }
+//             }
+//         },
+//     });
+// }
+
 if (process.env.NODE_ENV === 'development') global.prisma = prisma
 
 module.exports = {
-    create, createConnection, prisma
+    create, prisma
 }

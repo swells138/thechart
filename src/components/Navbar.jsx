@@ -54,6 +54,15 @@ const Navbar = () => {
                     <Button href="/login" variant="outlined" sx={{ my: 1, mx: 1.5 }}>
                         Login
                     </Button>
+                    <div>
+                            <Link
+                                variant="button"
+                                href="/profile"
+                                sx={{ my: 1, mx: 1.5 }}
+                            >
+                                <h1 className='text-gray-500 font-bold'>Profile</h1>
+                            </Link>
+                        </div>
                 </Toolbar>
             </AppBar>
         </>
