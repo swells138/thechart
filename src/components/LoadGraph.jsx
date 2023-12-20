@@ -2,8 +2,8 @@ import React from 'react'
 import "@react-sigma/core/lib/react-sigma.min.css";
 import Graph from "graphology";
 import { forceSimulation, forceLink, forceManyBody, forceCenter } from "d3-force";
-import { useLoadGraph, useRegisterEvents,useSigma } from "@react-sigma/core";
-import { useEffect, useState,useMemo } from "react";
+import { useLoadGraph, useRegisterEvents, useSigma } from "@react-sigma/core";
+import { useEffect, useState, useMemo } from "react";
 
 const LoadGraph = ({ onNodeClick }) => {
   const [nodeData, setNodeData] = useState({ nodeDataArray: [], connectionArray: [] });
@@ -14,7 +14,7 @@ const LoadGraph = ({ onNodeClick }) => {
   const registerEvents = useRegisterEvents();
 
 
-  useEffect(()=>{
+  useEffect(() => {
     registerEvents({
       doubleClickNode: (event) => {
         event.preventSigmaDefault()
@@ -71,19 +71,19 @@ const LoadGraph = ({ onNodeClick }) => {
         }
       },
     })
-  },[registerEvents, sigma, draggedNode])
+  }, [registerEvents, sigma, draggedNode])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const nodeResponse = await fetch(`http://localhost:3000/api/usersconnections`);
-  
+
         if (!nodeResponse.ok) {
           throw new Error(`HTTP error! status: ${nodeResponse.status}`);
         }
-  
+
         const nodeData = await nodeResponse.json();
-  
+
         setNodeData(prev => ({
           ...prev,
           nodeDataArray: nodeData.users,
@@ -93,10 +93,10 @@ const LoadGraph = ({ onNodeClick }) => {
         console.error('Error:', error);
       }
     };
-  
+
     fetchData();
   }, []);
-  
+
 
   useEffect(() => {
     nodeData.nodeDataArray.forEach((person) => {
@@ -125,26 +125,26 @@ const LoadGraph = ({ onNodeClick }) => {
     }));
 
     const simulation = forceSimulation(transformedNodes)
-    .force("link", forceLink(transformedConnections).id(d => d.id))
-    .force("charge", forceManyBody())
-    .force("center", forceCenter(450, 300)); // Adjust to match the dimensions of your Sigma container
+      .force("link", forceLink(transformedConnections).id(d => d.id))
+      .force("charge", forceManyBody())
+      .force("center", forceCenter(450, 300)); // Adjust to match the dimensions of your Sigma container
 
-  simulation.on("tick", () => {
-    sigma.getGraph().forEachNode((node, attributes) => {
-      const d3Node = transformedNodes.find(d => d.id === node);
-      sigma.getGraph().setNodeAttribute(node, "x", d3Node.x);
-      sigma.getGraph().setNodeAttribute(node, "y", d3Node.y);
+    simulation.on("tick", () => {
+      sigma.getGraph().forEachNode((node, attributes) => {
+        const d3Node = transformedNodes.find(d => d.id === node);
+        sigma.getGraph().setNodeAttribute(node, "x", d3Node.x);
+        sigma.getGraph().setNodeAttribute(node, "y", d3Node.y);
+      });
     });
-  });
 
-  loadGraph(graph);
+    loadGraph(graph);
 
-  return () => {
-    graph.clear();
-    simulation.stop();
-  };
-  
-}, [nodeData, loadGraph, graph]);
+    return () => {
+      graph.clear();
+      simulation.stop();
+    };
+
+  }, [nodeData, loadGraph, graph]);
 
 };
 
