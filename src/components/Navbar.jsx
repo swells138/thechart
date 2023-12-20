@@ -22,47 +22,49 @@ const Navbar = () => {
                             <Image width={75} height={75} src={logo} alt='the weird logo'></Image>
                         </Link>
                     </Typography>
-                    <nav className='columns-3 f'>
-                        <div>
-                            <Link
-                                variant="button"
-                                href="#"
-                                sx={{ my: 1, mx: 1.5 }}
-                            >
-                                <h1 className='text-gray-500 font-bold'>Invites</h1>
-                            </Link>
-                        </div>
-                        <div>
-                            <Link
-                                variant="button"
-                                href="/charts"
-                                sx={{ my: 1, mx: 1.5 }}
-                            >
-                                <h1 className='text-gray-500 font-bold'>Charts</h1>
-                            </Link>
-                        </div>
-                        <div>
-                            <Link
-                                variant="button"
-                                href="/community"
-                                sx={{ my: 1, mx: 1.5 }}
-                            >
-                                <h1 className='text-gray-500 font-bold'>Community</h1>
-                            </Link>
+                    <nav>
+                        <div className='columns-4'>
+                            <div>
+                                <Link
+                                    variant="button"
+                                    href="/charts"
+                                    sx={{ my: 1, mx: 1.5 }}
+                                >
+                                    <h1 className='text-gray-500 font-bold'>Charts</h1>
+                                </Link>
+                            </div>
+                            <div>
+                                <Link
+                                    variant="button"
+                                    href="/community"
+                                    sx={{ my: 1, mx: 1.5 }}
+                                >
+                                    <h1 className='text-gray-500 font-bold'>Community</h1>
+                                </Link>
+                            </div>
+                            <div>
+                                <Link
+                                    variant="button"
+                                    href="/connect"
+                                    sx={{ my: 1, mx: 1.5 }}
+                                >
+                                    <h1 className='text-gray-500 font-bold'>My Chart</h1>
+                                </Link>
+                            </div>
+                            <div>
+                                <Link
+                                    variant="button"
+                                    href="/profile"
+                                    sx={{ my: 1, mx: 1.5 }}
+                                >
+                                    <h1 className='text-gray-500 font-bold'>Profile</h1>
+                                </Link>
+                            </div>
                         </div>
                     </nav>
                     <Button href="/login" variant="outlined" sx={{ my: 1, mx: 1.5 }}>
                         Login
                     </Button>
-                    <div>
-                            <Link
-                                variant="button"
-                                href="/profile"
-                                sx={{ my: 1, mx: 1.5 }}
-                            >
-                                <h1 className='text-gray-500 font-bold'>Profile</h1>
-                            </Link>
-                        </div>
                 </Toolbar>
             </AppBar>
         </>

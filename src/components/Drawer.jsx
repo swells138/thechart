@@ -20,7 +20,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Avatar, Button, Table, TableCell, TableRow } from '@mui/material';
+import { Avatar, Button, Table, TableCell, TableRow, TextField } from '@mui/material';
 import eddy from "../../public/eddy.jpg"
 import logo from '../app/favicon.ico'
 import Link from 'next/link'
@@ -34,11 +34,13 @@ const darkTheme = createTheme({
     },
 });
 
-export default function PermanentDrawerLeft({ create,connect }) {
+export default function PermanentDrawerLeft({ create, connect }) {
     const [state, setState] = useState({
         node: false,
         connectButton: false,
-        person: false
+        person: false,
+        profile: false,
+        chart: true
     });
     const [nodeList, setNodeList] = useState({ nodeListArray: [], singleNode: {}, namedConnect: [] })
 
@@ -58,7 +60,7 @@ export default function PermanentDrawerLeft({ create,connect }) {
                     namedConnectionsResponse.json(),
                     nodeResponse.json(),
                 ]);
-                console.log("sydney",nodeData)
+                console.log("sydney", nodeData)
 
                 setNodeList((prev) => ({
                     ...prev,
@@ -75,7 +77,23 @@ export default function PermanentDrawerLeft({ create,connect }) {
 
     function handleCreate(event) {
         create(event)
-        
+        location.reload()
+    }
+
+    function onAccountClicked() {
+        setState(prevState => ({
+            ...prevState,
+            profile: true,
+            chart: false
+        }))
+    }
+
+    function onChartClicked() {
+        setState(prevState => ({
+            ...prevState,
+            profile: false,
+            chart: true
+        }))
     }
 
     function onNodeClicked() {
@@ -173,11 +191,51 @@ export default function PermanentDrawerLeft({ create,connect }) {
                         <Divider />
                         <List>
                             <ListItem disablePadding>
+                                <ListItemButton onClick={onChartClicked} >
+                                    <ListItemIcon>
+                                        <MailIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={"Chart"} />
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding>
                                 <ListItemButton onClick={onNodeClicked}>
                                     <ListItemIcon>
                                         <InboxIcon />
                                     </ListItemIcon>
                                     <ListItemText primary={"Nodes"} />
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding>
+                                <ListItemButton onClick={onAccountClicked}>
+                                    <ListItemIcon>
+                                        <InboxIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={"Account"} />
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding>
+                                <ListItemButton >
+                                    <ListItemIcon>
+                                        <MailIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={"Notifications"} />
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding>
+                                <ListItemButton >
+                                    <ListItemIcon>
+                                        <InboxIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={"Settings"} />
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding>
+                                <ListItemButton >
+                                    <ListItemIcon>
+                                        <MailIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={"Invites"} />
                                 </ListItemButton>
                             </ListItem>
                         </List>
@@ -199,9 +257,38 @@ export default function PermanentDrawerLeft({ create,connect }) {
                 <Box component="main" sx={{ marginTop: `64px`, ml: `${drawerWidth}px` }}>
                     <div className='flex justify-around columns-2 bg-stone-950'>
                         <div>
-                            <MyGraph
-                                sendNode={handleNodeSend}
-                            ></MyGraph>
+                            {state.profile && !state.chart && (
+                                <div className='flex p-5'>
+                                    <div className='flex flex-col text-white'>
+                                        <div className='py-1'>
+                                            <TextField id="accountName" label="Name" variant="standard" />
+                                        </div>
+                                        <div className='py-1'>
+                                            <TextField id="accountEmail" label="Email" variant="standard" />
+                                        </div>
+                                        <div className='py-1'>
+                                            <TextField id="accountPhoneNumber" label="Phone Number" variant="standard" />
+                                        </div>
+                                        <div className='py-1'>
+                                            <TextField id="accountAge" label="Age" variant="standard" />
+                                        </div>
+                                        <div className='py-1'>
+                                            <TextField id="accountCity" label="City" variant="standard" />
+                                        </div>
+                                        <div className='py-1'>
+                                            <TextField id="accountState" label="State" variant="standard" />
+                                        </div>
+                                        <div className='py-1'>
+                                            <TextField id="accountColor" label="Color" variant="standard" />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            {state.chart && !state.profile && (
+                                <MyGraph
+                                    sendNode={handleNodeSend}
+                                ></MyGraph>
+                            )}
                         </div>
                         <div style={{ height: "600px", width: "200px" }} className='text-white'>
                             {state.node && !state.connectButton && (

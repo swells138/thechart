@@ -19,7 +19,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Avatar, Button, Table, TableCell, TableRow } from '@mui/material';
+import { Avatar, Button, Table, TableCell, TableRow, TextField } from '@mui/material';
 import logo from "../favicon.ico"
 import Link from 'next/link'
 import Image from 'next/image'
@@ -95,24 +95,65 @@ const page = () => {
                         </List>
                         <Divider />
                         <List>
-                            {/* <ListItem disablePadding>
-                                <ListItemButton onClick={onNodeClicked}>
+                            <ListItem disablePadding>
+                                <ListItemButton >
                                     <ListItemIcon>
                                         <InboxIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary={"Nodes"} />
+                                    <ListItemText primary={"Account"} />
                                 </ListItemButton>
-                            </ListItem> */}
+                            </ListItem>
+                            <ListItem disablePadding>
+                                <ListItemButton >
+                                    <ListItemIcon>
+                                        <MailIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={"Notifications"} />
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding>
+                                <ListItemButton >
+                                    <ListItemIcon>
+                                        <InboxIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={"Settings"} />
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding>
+                                <ListItemButton >
+                                    <ListItemIcon>
+                                        <MailIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={"Invites"} />
+                                </ListItemButton>
+                            </ListItem>
                         </List>
                     </Drawer>
                 </Box>
-                <Box component="main" sx={{ marginTop: `64px`, ml: `${drawerWidth}px` }}>
-                    <div className='flex justify-around columns-2 bg-stone-950'>
-                        <div className='text-white'>
-                            <h1>?</h1>
-                        </div>
-                        <div style={{ height: "600px", width: "200px" }} className='text-white'>
-
+                <Box component="main" sx={{ marginTop: `80px`, ml: `${drawerWidth}px` }}>
+                    <div className='flex p-5'>
+                        <div className='flex flex-col text-white'>
+                            <div className='py-1'>
+                                <TextField id="accountName" label="Name" variant="standard" />
+                            </div>
+                            <div className='py-1'>
+                                <TextField id="accountEmail" label="Email" variant="standard" />
+                            </div>
+                            <div className='py-1'>
+                                <TextField id="accountPhoneNumber" label="Phone Number" variant="standard" />
+                            </div>
+                            <div className='py-1'>
+                                <TextField id="accountAge" label="Age" variant="standard" />
+                            </div>
+                            <div className='py-1'>
+                                <TextField id="accountCity" label="City" variant="standard" />
+                            </div>
+                            <div className='py-1'>
+                                <TextField id="accountState" label="State" variant="standard" />
+                            </div>
+                            <div className='py-1'>
+                                <TextField id="accountColor" label="Color" variant="standard" />
+                            </div>
                         </div>
                     </div>
                 </Box>
