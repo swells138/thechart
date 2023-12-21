@@ -13,7 +13,7 @@ const Navbar = () => {
                 position="static"
                 color="default"
                 elevation={0}
-                style={{ background: '#000000' }}
+                style={{ background: '#FFFFFF' }}
             >
                 <Toolbar className="flex-wrap">
                     <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
@@ -24,17 +24,17 @@ const Navbar = () => {
                     <div className='flex justify-between'>
                         <div className='mx-2'>
                             <Link href="/community">
-                                <h1 className='text-gray-500 font-bold'>Community</h1>
+                                <h1 className='font-bold'>Community</h1>
                             </Link>
                         </div>
                         <div className='mx-2'>
                             <Link href="/charts">
-                                <h1 className='text-gray-500 font-bold'>Charts</h1>
+                                <h1 className='font-bold'>Charts</h1>
                             </Link>
                         </div>
                         <div className='mx-2'>
                             <Link href="/connect">
-                                <h1 className='text-gray-500 font-bold'>My Chart</h1>
+                                <h1 className='font-bold'>My Chart</h1>
                             </Link>
                         </div>
                     </div>

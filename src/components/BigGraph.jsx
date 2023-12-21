@@ -45,29 +45,30 @@ const BigGraph = () => {
 
     return (
         <>
-            <div className="text-gray-500">
-                <div className="flex flex-col items-center">
-                    <div>
-                        <Typography variant="h3">Our Chart</Typography>
+            <div>
+                <div className="flex items-center mx-2">
+                    <div className="flex flex-col px-2">
+                        <Typography variant="h2">Our</Typography>
+                        <Typography variant="h2">Chart</Typography>
                     </div>
-                    <div className="columns-2 flex">
-                        <div>
-                            <SigmaContainer style={{ height: "600px", width: "900px" }}>
-                                <ControlsContainer position={"top-right"}>
-                                    <SearchControl style={{ width: "200px" }} />
-                                </ControlsContainer>
-                                <ControlsContainer position={"bottom-right"}>
-                                    <ZoomControl />
-                                    <FullScreenControl />
-                                </ControlsContainer>
-                                <LoadBigGraph
-                                    onNodeClick={handleNodeSend}
-                                ></LoadBigGraph>
-                            </SigmaContainer>
-                        </div>
-                        <div className="flex flex-col px-2">
+                    <div>
+                        <SigmaContainer style={{ height: "600px", width: "900px" }}>
+                            <ControlsContainer position={"top-right"}>
+                                <SearchControl style={{ width: "200px" }} />
+                            </ControlsContainer>
+                            <ControlsContainer position={"bottom-right"}>
+                                <ZoomControl />
+                                <FullScreenControl />
+                            </ControlsContainer>
+                            <LoadBigGraph
+                                onNodeClick={handleNodeSend}
+                            ></LoadBigGraph>
+                        </SigmaContainer>
+                    </div>
+                    <div className="flex flex-col px-2">
+                        <div className='flex flex-col p-5'>
                             {state.person && (
-                                <div className='flex flex-col items-center p-5'>
+                                <div>
                                     <Avatar src={eddy} alt={nodeList.singleNode.firstName}></Avatar>
                                     <h1 className='text-2xl'>{nodeList.singleNode.firstName} {nodeList.singleNode.lastName}</h1>
                                     <p>Age: {nodeList.singleNode.age}</p>

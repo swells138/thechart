@@ -130,204 +130,205 @@ export default function PermanentDrawerLeft({ create, connect }) {
 
     return (
         <>
-            <ThemeProvider theme={darkTheme}>
-                <Box sx={{ display: 'flex' }}>
-                    <CssBaseline />
-                    <AppBar
-                        position="fixed"
-                        sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-                    >
-                        <div className='bg-stone-950'>
-                            <Toolbar>
-                                <Typography variant="h6" noWrap component="div">
-                                    Your Chart
-                                </Typography>
-                            </Toolbar>
-                        </div>
-                    </AppBar>
-                    <Drawer
-                        sx={{
+
+            <Box sx={{ display: 'flex' }}>
+                <CssBaseline />
+                <AppBar
+                    elevation={1}
+                    position="fixed"
+                    sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
+                >
+                    <div className='bg-white text-black'>
+                        <Toolbar>
+                            <Typography variant="h6" noWrap component="div">
+                                Your Chart
+                            </Typography>
+                        </Toolbar>
+                    </div>
+                </AppBar>
+                <Drawer
+                    sx={{
+                        width: drawerWidth,
+                        flexShrink: 0,
+                        '& .MuiDrawer-paper': {
                             width: drawerWidth,
-                            flexShrink: 0,
-                            '& .MuiDrawer-paper': {
-                                width: drawerWidth,
-                                boxSizing: 'border-box',
-                            },
-                        }}
-                        variant="permanent"
-                        anchor="left"
-                    >
-                        <div className='py-1 ps-2'>
-                            <Link href='/'>
-                                <Image width={55} height={55} src={logo} alt='the weird logo'></Image>
-                            </Link>
+                            boxSizing: 'border-box',
+                        },
+                    }}
+                    variant="permanent"
+                    anchor="left"
+                >
+                    <div className='py-1 ps-2'>
+                        <Link href='/'>
+                            <Image width={55} height={55} src={logo} alt='the weird logo'></Image>
+                        </Link>
+                    </div>
+                    <Divider />
+                    <List>
+                        <Accordion>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <Typography>Add a Node</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <form id='form' action={handleCreate}>
+                                    <div className='flex flex-col mx-8'>
+                                        <input className='border rounded text-black my-1' id="name" name='name' placeholder='First Name'></input>
+                                        <input className='border rounded text-black my-1' id="last" name='last' placeholder='Last Name'></input>
+                                        <input className='border rounded text-black my-1' id="email" name='email' placeholder='Email'></input>
+                                        <input className='border rounded text-black my-1' id="color" name='color' placeholder='Color'></input>
+                                        <input className='border rounded text-black my-1' id="age" name='age' placeholder='Age'></input>
+                                        <input className='border rounded text-black my-1' id="city" name='city' placeholder='City'></input>
+                                        <input className='border rounded text-black my-1' id="state" name='state' placeholder='State'></input>
+                                        <Button color='secondary' className='p-1 mt-3' type='submit'>Add Node</Button>
+                                    </div>
+                                </form>
+                            </AccordionDetails>
+                        </Accordion>
+                    </List>
+                    <Divider />
+                    <List>
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={onChartClicked} >
+                                <ListItemIcon>
+                                    <MailIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={"Chart"} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={onNodeClicked}>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={"Nodes"} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={onAccountClicked}>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={"Account"} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton >
+                                <ListItemIcon>
+                                    <MailIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={"Notifications"} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton >
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={"Settings"} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton >
+                                <ListItemIcon>
+                                    <MailIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={"Invites"} />
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                    <Divider />
+                    {state.person && (
+                        <div className='flex flex-col items-center py-5'>
+                            <h1 className='text-2xl'>{nodeList.singleNode.firstName} {nodeList.singleNode.lastName}</h1>
+                            <p>Age: {nodeList.singleNode.age}</p>
+                            <p>Location: {nodeList.singleNode.city} {nodeList.singleNode.state}</p>
+                            <div>
+                                <Button className='py-1' color='secondary'>Edit</Button>
+                                <Button color="secondary">Delete</Button>
+                            </div>
                         </div>
-                        <Divider />
-                        <List>
-                            <Accordion>
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1a-content"
-                                    id="panel1a-header"
-                                >
-                                    <Typography>Add a Node</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                    <form id='form' action={handleCreate}>
-                                        <div className='flex flex-col mx-8'>
-                                            <input className='border rounded text-black my-1' id="name" name='name' placeholder='First Name'></input>
-                                            <input className='border rounded text-black my-1' id="last" name='last' placeholder='Last Name'></input>
-                                            <input className='border rounded text-black my-1' id="email" name='email' placeholder='Email'></input>
-                                            <input className='border rounded text-black my-1' id="color" name='color' placeholder='Color'></input>
-                                            <input className='border rounded text-black my-1' id="age" name='age' placeholder='Age'></input>
-                                            <input className='border rounded text-black my-1' id="city" name='city' placeholder='City'></input>
-                                            <input className='border rounded text-black my-1' id="state" name='state' placeholder='State'></input>
-                                            <Button color='secondary' className='p-1 mt-3' type='submit'>Add Node</Button>
-                                        </div>
-                                    </form>
-                                </AccordionDetails>
-                            </Accordion>
-                        </List>
-                        <Divider />
-                        <List>
-                            <ListItem disablePadding>
-                                <ListItemButton onClick={onChartClicked} >
-                                    <ListItemIcon>
-                                        <MailIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Chart"} />
-                                </ListItemButton>
-                            </ListItem>
-                            <ListItem disablePadding>
-                                <ListItemButton onClick={onNodeClicked}>
-                                    <ListItemIcon>
-                                        <InboxIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Nodes"} />
-                                </ListItemButton>
-                            </ListItem>
-                            <ListItem disablePadding>
-                                <ListItemButton onClick={onAccountClicked}>
-                                    <ListItemIcon>
-                                        <InboxIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Account"} />
-                                </ListItemButton>
-                            </ListItem>
-                            <ListItem disablePadding>
-                                <ListItemButton >
-                                    <ListItemIcon>
-                                        <MailIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Notifications"} />
-                                </ListItemButton>
-                            </ListItem>
-                            <ListItem disablePadding>
-                                <ListItemButton >
-                                    <ListItemIcon>
-                                        <InboxIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Settings"} />
-                                </ListItemButton>
-                            </ListItem>
-                            <ListItem disablePadding>
-                                <ListItemButton >
-                                    <ListItemIcon>
-                                        <MailIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Invites"} />
-                                </ListItemButton>
-                            </ListItem>
-                        </List>
-                        <Divider />
-                        {state.person && (
-                            <div className='flex flex-col items-center py-5'>
-                                <h1 className='text-2xl'>{nodeList.singleNode.firstName} {nodeList.singleNode.lastName}</h1>
-                                <p>Age: {nodeList.singleNode.age}</p>
-                                <p>Location: {nodeList.singleNode.city} {nodeList.singleNode.state}</p>
-                                <div>
-                                    <Button className='py-1' color='secondary'>Edit</Button>
-                                    <Button color="secondary">Delete</Button>
+                    )}
+                    <Divider />
+                </Drawer>
+            </Box>
+            <Box component="main" sx={{ marginTop: `64px`, ml: `${drawerWidth}px` }}>
+                <div className='flex justify-around columns-2'>
+                    <div>
+                        {state.profile && !state.chart && (
+                            <div className='flex p-5'>
+                                <div className='flex flex-col text-white'>
+                                    <div className='py-1'>
+                                        <TextField id="accountName" label="Name" variant="standard" />
+                                    </div>
+                                    <div className='py-1'>
+                                        <TextField id="accountEmail" label="Email" variant="standard" />
+                                    </div>
+                                    <div className='py-1'>
+                                        <TextField id="accountPhoneNumber" label="Phone Number" variant="standard" />
+                                    </div>
+                                    <div className='py-1'>
+                                        <TextField id="accountAge" label="Age" variant="standard" />
+                                    </div>
+                                    <div className='py-1'>
+                                        <TextField id="accountCity" label="City" variant="standard" />
+                                    </div>
+                                    <div className='py-1'>
+                                        <TextField id="accountState" label="State" variant="standard" />
+                                    </div>
+                                    <div className='py-1'>
+                                        <TextField id="accountColor" label="Color" variant="standard" />
+                                    </div>
                                 </div>
                             </div>
                         )}
-                        <Divider />
-                    </Drawer>
-                </Box>
-                <Box component="main" sx={{ marginTop: `64px`, ml: `${drawerWidth}px` }}>
-                    <div className='flex justify-around columns-2 bg-stone-950'>
-                        <div>
-                            {state.profile && !state.chart && (
-                                <div className='flex p-5'>
-                                    <div className='flex flex-col text-white'>
-                                        <div className='py-1'>
-                                            <TextField id="accountName" label="Name" variant="standard" />
-                                        </div>
-                                        <div className='py-1'>
-                                            <TextField id="accountEmail" label="Email" variant="standard" />
-                                        </div>
-                                        <div className='py-1'>
-                                            <TextField id="accountPhoneNumber" label="Phone Number" variant="standard" />
-                                        </div>
-                                        <div className='py-1'>
-                                            <TextField id="accountAge" label="Age" variant="standard" />
-                                        </div>
-                                        <div className='py-1'>
-                                            <TextField id="accountCity" label="City" variant="standard" />
-                                        </div>
-                                        <div className='py-1'>
-                                            <TextField id="accountState" label="State" variant="standard" />
-                                        </div>
-                                        <div className='py-1'>
-                                            <TextField id="accountColor" label="Color" variant="standard" />
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                            {state.chart && !state.profile && (
-                                <MyGraph
-                                    sendNode={handleNodeSend}
-                                ></MyGraph>
-                            )}
-                        </div>
-                        <div style={{ height: "600px", width: "200px" }} className='text-white'>
-                            {state.node && !state.connectButton && (
-                                <div className="h-full overflow-y-auto">
-                                    <h1 className='text-2xl font-bold sticky top-0 bg-stone-950 z-10 p-4'>Your Nodes</h1>
-                                    <Divider />
-                                    <div className="table-container">
-                                        <Table>
-                                            {nodeList.nodeListArray.map(item => (
-                                                <TableRow className='flex flex-row items-center ' key={item.id}>
-                                                    <Avatar alt={item.firstName} src={eddy} sx={{ width: 35, height: 35 }} />
-                                                    <TableCell className='text-1xl'>
-                                                        {item.firstName}
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </Table>
-                                    </div>
-                                </div>
-                            )}
-                            {state.connectButton && !state.node && (
-                                <div className="h-full overflow-y-auto">
-                                    <h1 className='text-2xl font-bold sticky top-0 bg-stone-950 z-10 p-4'>Connections</h1>
-                                    <Divider />
+                        {state.chart && !state.profile && (
+                            <MyGraph
+                                sendNode={handleNodeSend}
+                            ></MyGraph>
+                        )}
+                    </div>
+                    <div style={{ height: "600px", width: "200px" }}>
+                        {state.node && !state.connectButton && (
+                            <div className="h-full overflow-y-auto">
+                                <h1 className='text-2xl font-bold sticky top-0 z-10 bg-white p-4'>Your Nodes</h1>
+                                <Divider />
+                                <div className="table-container">
                                     <Table>
-                                        {nodeList.namedConnect.map(item => (
-                                            <TableRow className='flex flex-row items-center ' key={item.id} >
-                                                <TableCell className='py-2' >
-                                                    {item.personOne} + {item.personTwo}
+                                        {nodeList.nodeListArray.map(item => (
+                                            <TableRow className='flex flex-row items-center ' key={item.id}>
+                                                <Avatar alt={item.firstName} src={eddy} sx={{ width: 35, height: 35 }} />
+                                                <TableCell className='text-1xl'>
+                                                    {item.firstName}
                                                 </TableCell>
                                             </TableRow>
                                         ))}
                                     </Table>
                                 </div>
-                            )}
-                        </div>
+                            </div>
+                        )}
+                        {state.connectButton && !state.node && (
+                            <div className="h-full overflow-y-auto">
+                                <h1 className='text-2xl font-bold sticky top-0 bg-stone-950 z-10 p-4'>Connections</h1>
+                                <Divider />
+                                <Table>
+                                    {nodeList.namedConnect.map(item => (
+                                        <TableRow className='flex flex-row items-center ' key={item.id} >
+                                            <TableCell className='py-2' >
+                                                {item.personOne} + {item.personTwo}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </Table>
+                            </div>
+                        )}
                     </div>
-                </Box>
-            </ThemeProvider>
+                </div>
+            </Box>
+
         </>
     );
 }

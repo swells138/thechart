@@ -7,20 +7,20 @@ export default function Home() {
   return (
     < >
       <Navbar></Navbar>
-      <div className="flex flex-wrap ">
+      <div className="flex flex-wrap text-black">
         <div className="flex items-center w-full  md:w-1/2 lg:w-1/2">
           <div className="max-w-2xl mb-8">
-            <h1 className="text-7xl font-bold leading-snug tracking-tight text-gray-700 lg:text-7xl lg:leading-tight xl:text-8xl xl:leading-tight dark:text-white">
+            <h1 className="text-7xl font-bold leading-snug tracking-tight lg:text-7xl lg:leading-tight xl:text-8xl xl:leading-tight">
               The Chart
             </h1>
-            <p className="py-5 text-xl leading-normal text-gray-500 lg:text-xl xl:text-2xl dark:text-gray-300">
-              The Chart is a replica of the famous chart from the 90s queer TV show the L-word for keeping track of their ex lovers.
+            <p className="py-5 text-xl leading-normal lg:text-xl xl:text-2xl">
+              The Chart is a replica of the famous chart from the early 2000s queer TV show the L-word for keeping track of their ex lovers.
             </p>
 
             <div className="flex flex-col px-2 items-start space-y-3 sm:space-x-4 sm:space-y-0 sm:items-center sm:flex-row">
               <a
                 href="/community"
-                className="px-8 py-4 text-lg font-medium text-center text-white bg-indigo-600 rounded-md ">
+                className="px-8 py-4 text-lg font-medium text-center bg-indigo-600 rounded-md ">
                 Connect
               </a>
               {/* <a

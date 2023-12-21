@@ -12,6 +12,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { Card } from '@mui/material';
 
 
 // function Copyright(props) {
@@ -39,81 +40,65 @@ const page = () => {
 
     return (
 
-        <Container component="main" maxWidth="xs" >
+        <Container component="main" maxWidth="xs" className='pt-5' >
+            <Card className='p-5'>
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
 
-            <Box
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
-                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <div className='text-white'>
-                    <Typography component="h1" variant="h5" >
-                        Sign in
-                    </Typography>
-                </div>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                        variant="standard"
-                        color="secondary"
-                        focused
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        variant="standard"
-                        color="secondary"
-                        focused
-                    />
-                    {/* <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-
-                    /> */}
-                    <Button
-                        href='/'
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color='secondary'
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        Sign In
-                    </Button>
-                    {/* <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2" >
-                                Forgot password?
-                            </Link>
-                        </Grid>
-                        <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
-                            </Link>
-                        </Grid>
-                    </Grid> */}
+                    }}
+                >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <div>
+                        <Typography component="h1" variant="h5" >
+                            Sign in
+                        </Typography>
+                    </div>
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Email Address"
+                            name="email"
+                            autoComplete="email"
+                            autoFocus
+                            variant="standard"
+                            color="secondary"
+                            focused
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            variant="standard"
+                            color="secondary"
+                            focused
+                        />
+                        <Button
+                            href='/'
+                            type="submit"
+                            fullWidth
+                            variant="outlined"
+                            color='secondary'
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Sign In
+                        </Button>
+                    </Box>
                 </Box>
-            </Box>
-            {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
+            </Card>
         </Container>
 
     )
