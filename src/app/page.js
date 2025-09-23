@@ -1,11 +1,11 @@
-import Image from 'next/image'
-import Navbar from '../components/Navbar'
-import Link from 'next/link'
-import chart from '../../public/chartlogo2.png'
+import Image from "next/image";
+import Navbar from "../components/Navbar";
+import Link from "next/link";
+import chart from "../../public/chartlogo2.png";
 
 export default function Home() {
   return (
-    < >
+    <>
       <Navbar></Navbar>
       <div className="flex flex-wrap text-black">
         <div className="flex items-center w-full  md:w-1/2 lg:w-1/2">
@@ -14,13 +14,15 @@ export default function Home() {
               The Chart
             </h1>
             <p className="py-5 text-xl leading-normal lg:text-xl xl:text-2xl">
-              The Chart is a replica of the famous chart from the early 2000s queer TV show the L-word for keeping track of their ex lovers.
+              The Chart is a replica of the famous chart from the early 2000s queer TV show the
+              L-word for keeping track of their ex lovers.
             </p>
 
             <div className="flex flex-col px-2 items-start space-y-3 sm:space-x-4 sm:space-y-0 sm:items-center sm:flex-row">
               <a
                 href="/community"
-                className="px-8 py-4 text-lg font-medium text-center bg-indigo-600 rounded-md ">
+                className="px-8 py-4 text-lg font-medium text-center bg-indigo-600 rounded-md "
+              >
                 Connect
               </a>
               {/* <a
@@ -94,5 +96,5 @@ export default function Home() {
         </div>
       </div> */}
     </>
-  )
+  );
 }

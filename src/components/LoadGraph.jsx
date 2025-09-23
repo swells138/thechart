@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import "@react-sigma/core/lib/react-sigma.min.css";
 import Graph from "graphology";
 import { forceSimulation, forceLink, forceManyBody, forceCenter } from "d3-force";
@@ -13,12 +13,11 @@ const LoadGraph = ({ onNodeClick }) => {
   const graph = useMemo(() => new Graph(), []); // Memoize the graph instance
   const registerEvents = useRegisterEvents();
 
-
   useEffect(() => {
     registerEvents({
       doubleClickNode: (event) => {
-        event.preventSigmaDefault()
-        onNodeClick(event.node)
+        event.preventSigmaDefault();
+        onNodeClick(event.node);
       },
       downNode: (e) => {
         setDraggedNode(e.node);
@@ -70,8 +69,8 @@ const LoadGraph = ({ onNodeClick }) => {
           e.original.stopPropagation();
         }
       },
-    })
-  }, [registerEvents, sigma, draggedNode])
+    });
+  }, [registerEvents, sigma, draggedNode, onNodeClick]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,19 +83,18 @@ const LoadGraph = ({ onNodeClick }) => {
 
         const nodeData = await nodeResponse.json();
 
-        setNodeData(prev => ({
+        setNodeData((prev) => ({
           ...prev,
           nodeDataArray: nodeData.users,
-          connectionArray: nodeData.connections
+          connectionArray: nodeData.connections,
         }));
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
       }
     };
 
     fetchData();
   }, []);
-
 
   useEffect(() => {
     nodeData.nodeDataArray.forEach((person) => {
@@ -105,7 +103,7 @@ const LoadGraph = ({ onNodeClick }) => {
         y: Math.random(),
         size: 15,
         label: person.firstName,
-        color: person.color
+        color: person.color,
       });
     });
 
@@ -117,21 +115,27 @@ const LoadGraph = ({ onNodeClick }) => {
       );
     });
 
-    const transformedNodes = nodeData.nodeDataArray.map(node => ({ ...node, id: node.id.toString() }));
-    const transformedConnections = nodeData.connectionArray.map(connection => ({
+    const transformedNodes = nodeData.nodeDataArray.map((node) => ({
+      ...node,
+      id: node.id.toString(),
+    }));
+    const transformedConnections = nodeData.connectionArray.map((connection) => ({
       ...connection,
       source: connection.personOne.toString(),
-      target: connection.personTwo.toString()
+      target: connection.personTwo.toString(),
     }));
 
     const simulation = forceSimulation(transformedNodes)
-      .force("link", forceLink(transformedConnections).id(d => d.id))
+      .force(
+        "link",
+        forceLink(transformedConnections).id((d) => d.id)
+      )
       .force("charge", forceManyBody())
       .force("center", forceCenter(450, 300)); // Adjust to match the dimensions of your Sigma container
 
     simulation.on("tick", () => {
       sigma.getGraph().forEachNode((node, attributes) => {
-        const d3Node = transformedNodes.find(d => d.id === node);
+        const d3Node = transformedNodes.find((d) => d.id === node);
         sigma.getGraph().setNodeAttribute(node, "x", d3Node.x);
         sigma.getGraph().setNodeAttribute(node, "y", d3Node.y);
       });
@@ -143,10 +147,8 @@ const LoadGraph = ({ onNodeClick }) => {
       graph.clear();
       simulation.stop();
     };
-
-  }, [nodeData, loadGraph, graph]);
-
+  }, [nodeData, loadGraph, graph, sigma]);
+  return null;
 };
 
-
-export default LoadGraph
+export default LoadGraph;

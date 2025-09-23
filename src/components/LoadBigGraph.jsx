@@ -17,28 +17,30 @@ const LoadBigGraph = ({ onNodeClick }) => {
       try {
         const [nodeResponse, connectionResponse] = await Promise.all([
           fetch(`http://localhost:3000/api/node`),
-          fetch(`http://localhost:3000/api/connection`)
+          fetch(`http://localhost:3000/api/connection`),
         ]);
 
         if (!nodeResponse.ok || !connectionResponse.ok) {
-          throw new Error(`HTTP error! status: ${nodeResponse.status} or ${connectionResponse.status}`);
+          throw new Error(
+            `HTTP error! status: ${nodeResponse.status} or ${connectionResponse.status}`
+          );
         }
 
         const [nodeData, connectionData] = await Promise.all([
           nodeResponse.json(),
-          connectionResponse.json()
+          connectionResponse.json(),
         ]);
 
         setNodeData({
-          nodeDataArray: nodeData.map(node => ({ ...node, id: node.id.toString() })),
-          connectionArray: connectionData.map(connection => ({
+          nodeDataArray: nodeData.map((node) => ({ ...node, id: node.id.toString() })),
+          connectionArray: connectionData.map((connection) => ({
             ...connection,
             source: connection.personOne.toString(),
-            target: connection.personTwo.toString()
-          }))
+            target: connection.personTwo.toString(),
+          })),
         });
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
       }
     };
 
@@ -48,8 +50,8 @@ const LoadBigGraph = ({ onNodeClick }) => {
   useEffect(() => {
     registerEvents({
       doubleClickNode: (event) => {
-        event.preventSigmaDefault()
-        onNodeClick(event.node)
+        event.preventSigmaDefault();
+        onNodeClick(event.node);
       },
       downNode: (e) => {
         setDraggedNode(e.node);
@@ -101,8 +103,8 @@ const LoadBigGraph = ({ onNodeClick }) => {
           e.original.stopPropagation();
         }
       },
-    })
-  }, [registerEvents, sigma, draggedNode]);
+    });
+  }, [registerEvents, sigma, draggedNode, onNodeClick]);
 
   useEffect(() => {
     nodeData.nodeDataArray.forEach((person) => {
@@ -110,8 +112,8 @@ const LoadBigGraph = ({ onNodeClick }) => {
         x: Math.random(),
         y: Math.random(),
         size: 15,
-        label: person.firstName + ' ' + person.lastName,
-        color: person.color
+        label: person.firstName + " " + person.lastName,
+        color: person.color,
       });
     });
 
@@ -124,13 +126,16 @@ const LoadBigGraph = ({ onNodeClick }) => {
     });
 
     const simulation = forceSimulation(nodeData.nodeDataArray)
-      .force("link", forceLink(nodeData.connectionArray).id(d => d.id))
+      .force(
+        "link",
+        forceLink(nodeData.connectionArray).id((d) => d.id)
+      )
       .force("charge", forceManyBody())
       .force("center", forceCenter(450, 300)); // Assuming your container is 900x600
 
     simulation.on("tick", () => {
       sigma.getGraph().forEachNode((node, attributes) => {
-        const d3Node = nodeData.nodeDataArray.find(d => d.id === node);
+        const d3Node = nodeData.nodeDataArray.find((d) => d.id === node);
         sigma.getGraph().setNodeAttribute(node, "x", d3Node.x);
         sigma.getGraph().setNodeAttribute(node, "y", d3Node.y);
       });
@@ -142,7 +147,7 @@ const LoadBigGraph = ({ onNodeClick }) => {
       graph.clear();
       simulation.stop();
     };
-  }, [nodeData, loadGraph, graph]);
+  }, [nodeData, loadGraph, graph, sigma]);
 
   return null;
 };

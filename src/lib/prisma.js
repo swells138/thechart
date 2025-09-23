@@ -1,41 +1,41 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
-const prisma = global.prisma = new PrismaClient()
+const prisma = (global.prisma = new PrismaClient());
 
 async function create(event) {
-    "use server"
-    var nameValue = event.get("name");
-    var lastNameValue = event.get("last");
-    var emailValue = event.get("email")
-    var colorValue = event.get("color");
-    var ageValue = event.get("age");
-    var cityValue = event.get("city");
-    var stateValue = event.get("state");
+  "use server";
+  var nameValue = event.get("name");
+  var lastNameValue = event.get("last");
+  var emailValue = event.get("email");
+  var colorValue = event.get("color");
+  var ageValue = event.get("age");
+  var cityValue = event.get("city");
+  var stateValue = event.get("state");
 
-    // Create a new user
-    const newUser = await prisma.person.create({
-        data: {
-            firstName: nameValue,
-            lastName: lastNameValue,
-            email: emailValue,
-            color: colorValue,
-            age: ageValue,
-            city: cityValue,
-            state: stateValue
-        }
-    });
+  // Create a new user
+  const newUser = await prisma.person.create({
+    data: {
+      firstName: nameValue,
+      lastName: lastNameValue,
+      email: emailValue,
+      color: colorValue,
+      age: ageValue,
+      city: cityValue,
+      state: stateValue,
+    },
+  });
 
-    // Connect the new user to an existing user with the given ID
-    await prisma.connection.create({
-        data: {
-            personOneDetails: {
-                connect: { id: newUser.id }
-            },
-            personTwoDetails: {
-                connect: { id: 2 }
-            }
-        },
-    });
+  // Connect the new user to an existing user with the given ID
+  await prisma.connection.create({
+    data: {
+      personOneDetails: {
+        connect: { id: newUser.id },
+      },
+      personTwoDetails: {
+        connect: { id: 2 },
+      },
+    },
+  });
 }
 
 // async function createConnection(event) {
@@ -73,8 +73,9 @@ async function create(event) {
 //     });
 // }
 
-if (process.env.NODE_ENV === 'development') global.prisma = prisma
+if (process.env.NODE_ENV === "development") global.prisma = prisma;
 
 module.exports = {
-    create, prisma
-}
+  create,
+  prisma,
+};

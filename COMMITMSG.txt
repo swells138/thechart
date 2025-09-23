@@ -1,0 +1,7 @@
+chore: cleanup, env handling, formatting, lint fixes, hooks
+
+- ignore .env and add .env.example
+- add Prettier config + scripts; format repo
+- consolidate next.config.js export
+- fix ESLint warnings (hooks deps, next image)
+- add Husky + lint-staged pre-commit
