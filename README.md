@@ -11,7 +11,8 @@ npm install
 2. Environment variables
 
 - Copy `.env.example` to `.env` and set values.
-- The app expects `DATABASE_URL` (MySQL/PlanetScale style connection string).
+- Provide a `DATABASE_URL` using your Prisma Accelerate connection string (e.g. the Neon Accelerate URL).
+- Provide a `DIRECT_URL` using the standard Neon connection string so Prisma can run migrations (`db push`, `migrate`, etc.).
 
 3. Prisma
 
