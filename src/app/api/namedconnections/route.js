@@ -1,9 +1,16 @@
-const { PrismaClient } = require("@prisma/client");
-const { NextResponse } = require("next/server");
+import { NextResponse } from "next/server";
+import { getPrismaClient } from "../../../lib/prisma";
 
-const prisma = new PrismaClient();
+export const dynamic = "force-dynamic";
 
-async function GET(req, res) {
+export async function GET() {
+  const prisma = getPrismaClient();
+
+  if (!prisma) {
+    console.warn("DATABASE_URL is not configured. Returning empty named connections list.");
+    return NextResponse.json([]);
+  }
+
   try {
     const connectionsWithNames = await prisma.connection.findMany({
       include: {
@@ -23,9 +30,6 @@ async function GET(req, res) {
     return NextResponse.json(connectionsWithNamesAndPersons);
   } catch (error) {
     console.error("Error fetching connections with names:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
-module.exports = {
-  GET,
-};

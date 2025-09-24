@@ -1,9 +1,16 @@
-const { PrismaClient } = require("@prisma/client");
-const { NextResponse } = require("next/server");
+import { NextResponse } from "next/server";
+import { getPrismaClient } from "../../../lib/prisma";
 
-const prisma = new PrismaClient();
+export const dynamic = "force-dynamic";
 
-async function GET(request, _) {
+export async function GET() {
+  const prisma = getPrismaClient();
+
+  if (!prisma) {
+    console.warn("DATABASE_URL is not configured. Returning empty users connections list.");
+    return NextResponse.json({ users: [], connections: [] });
+  }
+
   try {
     const connections = await prisma.connection.findMany({
       where: {
@@ -14,9 +21,9 @@ async function GET(request, _) {
     const userIds = connections.map((connection) => {
       if (connection.personOne !== 2) {
         return connection.personOne;
-      } else {
-        return connection.personTwo;
       }
+
+      return connection.personTwo;
     });
 
     if (!userIds.includes(2)) {
@@ -45,11 +52,5 @@ async function GET(request, _) {
   } catch (error) {
     console.error("Error querying database:", error);
     return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }
-
-module.exports = {
-  GET,
-};

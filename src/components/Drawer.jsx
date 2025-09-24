@@ -34,7 +34,7 @@ const darkTheme = createTheme({
   },
 });
 
-export default function PermanentDrawerLeft({ create, connect }) {
+export default function PermanentDrawerLeft({ create }) {
   const [state, setState] = useState({
     node: false,
     connectButton: false,
