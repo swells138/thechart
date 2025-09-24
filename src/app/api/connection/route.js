@@ -1,9 +1,9 @@
-const { PrismaClient } = require("@prisma/client");
-const { NextResponse } = require("next/server");
+import { PrismaClient } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-async function GET(request, _) {
+export async function GET(_request) {
   try {
     const users = await prisma.connection.findMany();
     const userArray = users.map((user) => {
@@ -19,7 +19,3 @@ async function GET(request, _) {
     await prisma.$disconnect();
   }
 }
-
-module.exports = {
-  GET,
-};
