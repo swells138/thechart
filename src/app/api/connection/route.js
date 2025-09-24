@@ -1,9 +1,16 @@
-import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { getPrismaClient } from "../../../lib/prisma";
 
-const prisma = new PrismaClient();
+export const dynamic = "force-dynamic";
 
 export async function GET(_request) {
+  const prisma = getPrismaClient();
+
+  if (!prisma) {
+    console.warn("DATABASE_URL is not configured. Returning empty connection list.");
+    return NextResponse.json([]);
+  }
+
   try {
     const users = await prisma.connection.findMany();
     const userArray = users.map((user) => {
@@ -15,7 +22,5 @@ export async function GET(_request) {
   } catch (error) {
     console.error("Error querying database:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }
